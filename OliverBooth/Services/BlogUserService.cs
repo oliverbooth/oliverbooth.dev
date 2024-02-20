@@ -2,6 +2,7 @@ using System.Collections.Concurrent;
 using System.Diagnostics.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
 using OliverBooth.Data.Blog;
+using BC = BCrypt.Net.BCrypt;
 
 namespace OliverBooth.Services;
 
@@ -34,5 +35,13 @@ internal sealed class BlogUserService : IBlogUserService
 
         if (user is not null) _userCache.TryAdd(id, user);
         return user is not null;
+    }
+
+    /// <inheritdoc />
+    public bool VerifyLogin(string email, string password, [NotNullWhen(true)] out IUser? user)
+    {
+        using BlogContext context = _dbContextFactory.CreateDbContext();
+        user = context.Users.FirstOrDefault(u => u.EmailAddress == email);
+        return user is not null && BC.Verify(password, ((User)user).Password);
     }
 }

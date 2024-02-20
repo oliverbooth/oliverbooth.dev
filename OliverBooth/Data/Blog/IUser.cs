@@ -36,6 +36,12 @@ public interface IUser
     DateTimeOffset Registered { get; }
 
     /// <summary>
+    ///     Gets the user's TOTP token.
+    /// </summary>
+    /// <value>The TOTP token.</value>
+    string? Totp { get; }
+
+    /// <summary>
     ///     Gets the URL of the user's avatar.
     /// </summary>
     /// <param name="size">The size of the avatar.</param>

@@ -1,0 +1,9 @@
+@page
+@model OliverBooth.Pages.Blog.Admin.Index
+
+@{
+    ViewData["Title"] = "Admin";
+}
+
+<h1>Hello @(Model.CurrentUser.DisplayName)!</h1>
+<a asp-controller="Admin" asp-action="Logout">Logout</a>

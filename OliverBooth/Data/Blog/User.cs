@@ -26,6 +26,9 @@ internal sealed class User : IUser, IBlogAuthor
     /// <inheritdoc />
     public DateTimeOffset Registered { get; private set; } = DateTimeOffset.UtcNow;
 
+    /// <inheritdoc />
+    public string? Totp { get; private set; }
+
     /// <summary>
     ///     Gets or sets the password hash.
     /// </summary>
