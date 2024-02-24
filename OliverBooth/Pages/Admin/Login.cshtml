@@ -1,0 +1,30 @@
+@page
+@model OliverBooth.Pages.Admin.Login
+
+@{
+    ViewData["Title"] = "Login";
+}
+
+@section Styles
+{
+    <link rel="stylesheet" href="~/css/admin.min.css" asp-append-version="true">
+}
+
+<div class="form-signin m-auto">
+
+    <form method="post" asp-controller="Admin" asp-action="Login">
+        <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
+
+        <div class="form-floating">
+            <input type="email" class="form-control" id="login-email" name="login-email" placeholder="name@example.com">
+            <label for="login-email">Email address</label>
+        </div>
+        <div class="form-floating">
+            <input type="password" class="form-control" id="login-password" name="login-password" placeholder="Password">
+            <label for="login-password">Password</label>
+        </div>
+
+        <button class="btn btn-primary w-100 py-2" type="submit">Sign in</button>
+    </form>
+
+</div>

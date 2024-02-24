@@ -7,6 +7,7 @@ using OliverBooth.Markdown.Template;
 using OliverBooth.Markdown.Timestamp;
 using OliverBooth.Services;
 using Serilog;
+using X10D.Hosting.DependencyInjection;
 
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
@@ -36,11 +37,11 @@ builder.Services.AddHttpClient();
 builder.Services.AddSingleton<IContactService, ContactService>();
 builder.Services.AddSingleton<ITemplateService, TemplateService>();
 builder.Services.AddSingleton<IBlogPostService, BlogPostService>();
-builder.Services.AddSingleton<ISessionService, SessionService>();
 builder.Services.AddSingleton<IUserService, UserService>();
 builder.Services.AddSingleton<IProjectService, ProjectService>();
 builder.Services.AddSingleton<IMastodonService, MastodonService>();
 builder.Services.AddSingleton<IReadingListService, ReadingListService>();
+builder.Services.AddHostedSingleton<ISessionService, SessionService>();
 builder.Services.AddRazorPages().AddRazorRuntimeCompilation();
 builder.Services.AddControllersWithViews();
 builder.Services.AddRouting(options => options.LowercaseUrls = true);

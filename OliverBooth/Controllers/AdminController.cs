@@ -1,17 +1,17 @@
 using System.Net;
 using Microsoft.AspNetCore.Mvc;
-using OliverBooth.Data.Blog;
+using OliverBooth.Data.Web;
 using OliverBooth.Services;
 using ISession = OliverBooth.Data.Blog.ISession;
 
-namespace OliverBooth.Controllers.Blog;
+namespace OliverBooth.Controllers;
 
 [Controller]
 [Route("auth/admin")]
 public sealed class AdminController : ControllerBase
 {
     private readonly ILogger<AdminController> _logger;
-    private readonly IBlogUserService _userService;
+    private readonly IUserService _userService;
     private readonly ISessionService _sessionService;
 
     /// <summary>
@@ -21,7 +21,7 @@ public sealed class AdminController : ControllerBase
     /// <param name="userService">The user service.</param>
     /// <param name="sessionService">The session service.</param>
     public AdminController(ILogger<AdminController> logger,
-        IBlogUserService userService,
+        IUserService userService,
         ISessionService sessionService)
     {
         _logger = logger;
@@ -39,14 +39,14 @@ public sealed class AdminController : ControllerBase
         if (string.IsNullOrWhiteSpace(loginEmail))
         {
             _logger.LogInformation("Login attempt from {Host} with empty login", remoteIpAddress);
-            return RedirectToPage("/blog/admin/login");
+            return RedirectToPage("/admin/login");
         }
 
         if (string.IsNullOrWhiteSpace(loginPassword))
         {
             _logger.LogInformation("Login attempt as '{Email}' from {Host} with empty password", loginEmail,
                 remoteIpAddress);
-            return RedirectToPage("/blog/admin/login");
+            return RedirectToPage("/admin/login");
         }
 
         if (_userService.VerifyLogin(loginEmail, loginPassword, out IUser? user))
@@ -56,14 +56,14 @@ public sealed class AdminController : ControllerBase
         else
         {
             _logger.LogInformation("Login attempt for '{Email}' failed from {Host}", loginEmail, remoteIpAddress);
-            return RedirectToPage("/blog/admin/login");
+            return RedirectToPage("/admin/login");
         }
 
         ISession session = _sessionService.CreateSession(Request, user);
         Span<byte> sessionBytes = stackalloc byte[16];
         session.Id.TryWriteBytes(sessionBytes);
         Response.Cookies.Append("sid", Convert.ToBase64String(sessionBytes));
-        return RedirectToPage("/blog/admin/index");
+        return RedirectToPage("/admin/index");
     }
 
     [HttpGet("logout")]
@@ -72,7 +72,6 @@ public sealed class AdminController : ControllerBase
         if (_sessionService.TryGetSession(Request, out ISession? session, true))
             _sessionService.DeleteSession(session);
 
-        Response.Cookies.Delete("sid");
-        return RedirectToPage("/blog/admin/login");
+        return _sessionService.DeleteSessionCookie(Response);
     }
 }
