@@ -23,9 +23,15 @@ public class Index : PageModel
 
     public IActionResult OnGet()
     {
-        if (!_sessionService.TryGetSession(HttpContext.Request, out ISession? session))
+        if (!_sessionService.TryGetSession(Request, out ISession? session))
         {
             _logger.LogDebug("Session not found; redirecting");
+            return _sessionService.DeleteSessionCookie(Response);
+        }
+
+        if (!_sessionService.ValidateSession(Request, session))
+        {
+            _logger.LogDebug("Session invalid; redirecting");
             return _sessionService.DeleteSessionCookie(Response);
         }
 

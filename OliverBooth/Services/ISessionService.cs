@@ -1,4 +1,5 @@
 using System.Diagnostics.CodeAnalysis;
+using Microsoft.AspNetCore.Mvc;
 using OliverBooth.Data.Web;
 using ISession = OliverBooth.Data.Blog.ISession;
 
@@ -47,10 +48,20 @@ public interface ISessionService
     ///     When this method returns, contains the session with the specified request, if the user is found; otherwise,
     ///     <see langword="null" />.
     /// </param>
-    /// <param name="includeInvalid">
-    ///     <see langword="true" /> to include invalid sessions in the search; otherwise, <see langword="false" />.
-    /// </param>
     /// <returns><see langword="true" /> if the session was found; otherwise, <see langword="false" />.</returns>
     /// <exception cref="ArgumentNullException"><paramref name="request" /> is <see langword="null" />.</exception>
-    bool TryGetSession(HttpRequest request, [NotNullWhen(true)] out ISession? session, bool includeInvalid = false);
+    bool TryGetSession(HttpRequest request, [NotNullWhen(true)] out ISession? session);
+
+    /// <summary>
+    ///     Validates the session with the incoming HTTP request.
+    /// </summary>
+    /// <param name="request">The HTTP request.</param>
+    /// <param name="session">The session.</param>
+    /// <returns><see langword="true" /> if the session is valid; otherwise, <see langword="false" />.</returns>
+    /// <exception cref="ArgumentNullException">
+    ///     <para><paramref name="request" /> is <see langword="null" />.</para>
+    ///     -or-
+    ///     <para><paramref name="session" /> is <see langword="null" />.</para>
+    /// </exception>
+    bool ValidateSession(HttpRequest request, ISession session);
 }

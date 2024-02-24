@@ -69,7 +69,7 @@ public sealed class AdminController : ControllerBase
     [HttpGet("logout")]
     public IActionResult Logout()
     {
-        if (_sessionService.TryGetSession(Request, out ISession? session, true))
+        if (_sessionService.TryGetSession(Request, out ISession? session))
             _sessionService.DeleteSession(session);
 
         return _sessionService.DeleteSessionCookie(Response);

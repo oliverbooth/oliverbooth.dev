@@ -1,5 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Net;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using OliverBooth.Data.Blog;
@@ -71,8 +72,7 @@ internal sealed class SessionService : ISessionService
     }
 
     /// <inheritdoc />
-    public bool TryGetSession(HttpRequest request, [NotNullWhen(true)] out ISession? session,
-        bool includeInvalid = false)
+    public bool TryGetSession(HttpRequest request, [NotNullWhen(true)] out ISession? session)
     {
         if (request is null) throw new ArgumentNullException(nameof(request));
 
@@ -88,12 +88,20 @@ internal sealed class SessionService : ISessionService
             return false;
 
         var sessionId = new Guid(bytes);
-        if (!TryGetSession(sessionId, out session))
-            return false;
+        return TryGetSession(sessionId, out session);
+    }
 
-        if (!includeInvalid && session.Expires >= DateTimeOffset.UtcNow)
+    /// <inheritdoc />
+    public bool ValidateSession(HttpRequest request, ISession session)
+    {
+        if (request is null) throw new ArgumentNullException(nameof(request));
+        if (session is null) throw new ArgumentNullException(nameof(session));
+
+        IPAddress? remoteIpAddress = request.HttpContext.Connection.RemoteIpAddress;
+        if (remoteIpAddress is null) return false;
+
+        if (session.Expires >= DateTimeOffset.UtcNow)
         {
-            session = null;
             return false;
         }
 
@@ -101,22 +109,13 @@ internal sealed class SessionService : ISessionService
         Span<byte> sessionAddressBytes = stackalloc byte[16];
         if (!remoteIpAddress.TryWriteBytes(remoteAddressBytes, out _) ||
             !session.IpAddress.TryWriteBytes(sessionAddressBytes, out _))
-        {
-            session = null;
             return false;
-        }
 
-        if (!includeInvalid && !remoteAddressBytes.SequenceEqual(sessionAddressBytes))
-        {
-            session = null;
+        if (!remoteAddressBytes.SequenceEqual(sessionAddressBytes))
             return false;
-        }
 
-        if (!includeInvalid && _userService.TryGetUser(session.UserId, out _))
-        {
-            session = null;
+        if (_userService.TryGetUser(session.UserId, out _))
             return false;
-        }
 
         return true;
     }
