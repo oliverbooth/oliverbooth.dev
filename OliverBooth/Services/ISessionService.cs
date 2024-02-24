@@ -1,7 +1,7 @@
 using System.Diagnostics.CodeAnalysis;
 using Microsoft.AspNetCore.Mvc;
 using OliverBooth.Data.Web;
-using ISession = OliverBooth.Data.Blog.ISession;
+using ISession = OliverBooth.Data.Web.ISession;
 
 namespace OliverBooth.Services;
 

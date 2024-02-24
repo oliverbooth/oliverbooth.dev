@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using OliverBooth.Data.Blog;
 using OliverBooth.Data.Web;
-using ISession = OliverBooth.Data.Blog.ISession;
+using ISession = OliverBooth.Data.Web.ISession;
 
 namespace OliverBooth.Services;
 
@@ -13,7 +13,7 @@ internal sealed class SessionService : ISessionService
 {
     private readonly ILogger<SessionService> _logger;
     private readonly IUserService _userService;
-    private readonly IDbContextFactory<BlogContext> _blogContextFactory;
+    private readonly IDbContextFactory<WebContext> _webContextFactory;
 
     /// <summary>
     ///     Initializes a new instance of the <see cref="SessionService" /> class.
@@ -29,7 +29,7 @@ internal sealed class SessionService : ISessionService
     {
         _logger = logger;
         _userService = userService;
-        _blogContextFactory = blogContextFactory;
+        _webContextFactory = webContextFactory;
     }
 
     /// <inheritdoc />
@@ -38,7 +38,7 @@ internal sealed class SessionService : ISessionService
         if (request is null) throw new ArgumentNullException(nameof(request));
         if (user is null) throw new ArgumentNullException(nameof(user));
 
-        using BlogContext context = _blogContextFactory.CreateDbContext();
+        using WebContext context = _webContextFactory.CreateDbContext();
         var now = DateTimeOffset.UtcNow;
         var session = new Session
         {
@@ -58,7 +58,7 @@ internal sealed class SessionService : ISessionService
     /// <inheritdoc />
     public void DeleteSession(ISession session)
     {
-        using BlogContext context = _blogContextFactory.CreateDbContext();
+        using WebContext context = _webContextFactory.CreateDbContext();
         context.Sessions.Remove((Session)session);
         context.SaveChanges();
     }
@@ -66,7 +66,7 @@ internal sealed class SessionService : ISessionService
     /// <inheritdoc />
     public bool TryGetSession(Guid sessionId, [NotNullWhen(true)] out ISession? session)
     {
-        using BlogContext context = _blogContextFactory.CreateDbContext();
+        using WebContext context = _webContextFactory.CreateDbContext();
         session = context.Sessions.FirstOrDefault(s => s.Id == sessionId);
         return session is not null;
     }

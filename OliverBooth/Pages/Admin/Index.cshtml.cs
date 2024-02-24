@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using OliverBooth.Data.Web;
 using OliverBooth.Services;
-using ISession = OliverBooth.Data.Blog.ISession;
+using ISession = OliverBooth.Data.Web.ISession;
 
 namespace OliverBooth.Pages.Admin;
 

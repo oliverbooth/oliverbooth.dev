@@ -2,7 +2,7 @@ using System.Net;
 using Microsoft.AspNetCore.Mvc;
 using OliverBooth.Data.Web;
 using OliverBooth.Services;
-using ISession = OliverBooth.Data.Blog.ISession;
+using ISession = OliverBooth.Data.Web.ISession;
 
 namespace OliverBooth.Controllers;
 

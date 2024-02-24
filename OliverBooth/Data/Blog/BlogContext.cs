@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using OliverBooth.Data.Blog.Configuration;
+using OliverBooth.Data.Web;
 
 namespace OliverBooth.Data.Blog;
 
@@ -25,12 +26,6 @@ internal sealed class BlogContext : DbContext
     /// <value>The collection of blog posts.</value>
     public DbSet<BlogPost> BlogPosts { get; private set; } = null!;
 
-    /// <summary>
-    ///     Gets the collection of sessions in the database.
-    /// </summary>
-    /// <value>The collection of sessions.</value>
-    public DbSet<Session> Sessions { get; private set; } = null!;
-
     /// <inheritdoc />
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
@@ -43,6 +38,5 @@ internal sealed class BlogContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfiguration(new BlogPostConfiguration());
-        modelBuilder.ApplyConfiguration(new SessionConfiguration());
     }
 }

@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using OliverBooth.Data.Blog.Configuration;
 using OliverBooth.Data.Web.Configuration;
 
 namespace OliverBooth.Data.Web;
@@ -44,6 +45,12 @@ internal sealed class WebContext : DbContext
     public DbSet<Project> Projects { get; private set; } = null!;
 
     /// <summary>
+    ///     Gets the collection of sessions in the database.
+    /// </summary>
+    /// <value>The collection of sessions.</value>
+    public DbSet<Session> Sessions { get; private set; } = null!;
+
+    /// <summary>
     ///     Gets the set of site configuration items.
     /// </summary>
     /// <value>The set of site configuration items.</value>
@@ -77,6 +84,7 @@ internal sealed class WebContext : DbContext
         modelBuilder.ApplyConfiguration(new ProgrammingLanguageConfiguration());
         modelBuilder.ApplyConfiguration(new ProjectConfiguration());
         modelBuilder.ApplyConfiguration(new TemplateConfiguration());
+        modelBuilder.ApplyConfiguration(new SessionConfiguration());
         modelBuilder.ApplyConfiguration(new SiteConfigurationConfiguration());
         modelBuilder.ApplyConfiguration(new UserConfiguration());
     }

@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace OliverBooth.Data.Blog.Configuration;
+namespace OliverBooth.Data.Web.Configuration;
 
 internal sealed class SessionConfiguration : IEntityTypeConfiguration<Session>
 {
