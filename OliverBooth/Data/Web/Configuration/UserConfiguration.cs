@@ -1,8 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using OliverBooth.Data.Web;
 
-namespace OliverBooth.Data.Blog.Configuration;
+namespace OliverBooth.Data.Web.Configuration;
 
 internal sealed class UserConfiguration : IEntityTypeConfiguration<User>
 {
