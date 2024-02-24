@@ -1,5 +1,5 @@
 using System.Diagnostics.CodeAnalysis;
-using OliverBooth.Data.Blog;
+using OliverBooth.Data.Web;
 using ISession = OliverBooth.Data.Blog.ISession;
 
 namespace OliverBooth.Services;

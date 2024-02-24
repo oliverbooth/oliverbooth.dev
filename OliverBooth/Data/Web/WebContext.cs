@@ -55,6 +55,12 @@ internal sealed class WebContext : DbContext
     /// <value>The collection of templates.</value>
     public DbSet<Template> Templates { get; private set; } = null!;
 
+    /// <summary>
+    ///     Gets the collection of users in the database.
+    /// </summary>
+    /// <value>The collection of users.</value>
+    public DbSet<User> Users { get; private set; } = null!;
+
     /// <inheritdoc />
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
@@ -72,5 +78,6 @@ internal sealed class WebContext : DbContext
         modelBuilder.ApplyConfiguration(new ProjectConfiguration());
         modelBuilder.ApplyConfiguration(new TemplateConfiguration());
         modelBuilder.ApplyConfiguration(new SiteConfigurationConfiguration());
+        modelBuilder.ApplyConfiguration(new UserConfiguration());
     }
 }

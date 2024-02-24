@@ -2,8 +2,9 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Security.Cryptography;
 using System.Text;
 using Cysharp.Text;
+using OliverBooth.Data.Blog;
 
-namespace OliverBooth.Data.Blog;
+namespace OliverBooth.Data.Web;
 
 /// <summary>
 ///     Represents a user.

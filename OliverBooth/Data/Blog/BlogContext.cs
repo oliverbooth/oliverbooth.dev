@@ -31,12 +31,6 @@ internal sealed class BlogContext : DbContext
     /// <value>The collection of sessions.</value>
     public DbSet<Session> Sessions { get; private set; } = null!;
 
-    /// <summary>
-    ///     Gets the collection of users in the database.
-    /// </summary>
-    /// <value>The collection of users.</value>
-    public DbSet<User> Users { get; private set; } = null!;
-
     /// <inheritdoc />
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
@@ -50,6 +44,5 @@ internal sealed class BlogContext : DbContext
     {
         modelBuilder.ApplyConfiguration(new BlogPostConfiguration());
         modelBuilder.ApplyConfiguration(new SessionConfiguration());
-        modelBuilder.ApplyConfiguration(new UserConfiguration());
     }
 }

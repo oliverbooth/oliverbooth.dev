@@ -11,7 +11,7 @@ namespace OliverBooth.Services;
 internal sealed class SessionService : ISessionService
 {
     private readonly ILogger<SessionService> _logger;
-    private readonly IBlogUserService _userService;
+    private readonly IUserService _userService;
     private readonly IDbContextFactory<BlogContext> _blogContextFactory;
 
     /// <summary>
@@ -22,7 +22,7 @@ internal sealed class SessionService : ISessionService
     /// <param name="blogContextFactory">The <see cref="BlogContext" /> factory.</param>
     /// <param name="webContextFactory">The <see cref="WebContext" /> factory.</param>
     public SessionService(ILogger<SessionService> logger,
-        IBlogUserService userService,
+        IUserService userService,
         IDbContextFactory<BlogContext> blogContextFactory,
         IDbContextFactory<WebContext> webContextFactory)
     {

@@ -3,6 +3,7 @@ using Humanizer;
 using Markdig;
 using Microsoft.EntityFrameworkCore;
 using OliverBooth.Data.Blog;
+using OliverBooth.Data.Web;
 
 namespace OliverBooth.Services;
 
@@ -12,7 +13,7 @@ namespace OliverBooth.Services;
 internal sealed class BlogPostService : IBlogPostService
 {
     private readonly IDbContextFactory<BlogContext> _dbContextFactory;
-    private readonly IBlogUserService _blogUserService;
+    private readonly IUserService _userService;
     private readonly MarkdownPipeline _markdownPipeline;
 
     /// <summary>
@@ -21,14 +22,14 @@ internal sealed class BlogPostService : IBlogPostService
     /// <param name="dbContextFactory">
     ///     The <see cref="IDbContextFactory{TContext}" /> used to create a <see cref="BlogContext" />.
     /// </param>
-    /// <param name="blogUserService">The <see cref="IBlogUserService" />.</param>
+    /// <param name="userService">The <see cref="IUserService" />.</param>
     /// <param name="markdownPipeline">The <see cref="MarkdownPipeline" />.</param>
     public BlogPostService(IDbContextFactory<BlogContext> dbContextFactory,
-        IBlogUserService blogUserService,
+        IUserService userService,
         MarkdownPipeline markdownPipeline)
     {
         _dbContextFactory = dbContextFactory;
-        _blogUserService = blogUserService;
+        _userService = userService;
         _markdownPipeline = markdownPipeline;
     }
 
@@ -163,7 +164,7 @@ internal sealed class BlogPostService : IBlogPostService
             return post;
         }
 
-        if (_blogUserService.TryGetUser(post.AuthorId, out IUser? user) && user is IBlogAuthor author)
+        if (_userService.TryGetUser(post.AuthorId, out IUser? user) && user is IBlogAuthor author)
         {
             post.Author = author;
         }

@@ -1,7 +1,7 @@
 using System.Net;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using OliverBooth.Data.Blog;
+using OliverBooth.Data.Web;
 using OliverBooth.Services;
 using ISession = OliverBooth.Data.Blog.ISession;
 

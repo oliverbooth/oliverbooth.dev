@@ -1,12 +1,12 @@
 using System.Diagnostics.CodeAnalysis;
-using OliverBooth.Data.Blog;
+using OliverBooth.Data.Web;
 
 namespace OliverBooth.Services;
 
 /// <summary>
 ///     Represents a service for managing users.
 /// </summary>
-public interface IBlogUserService
+public interface IUserService
 {
     /// <summary>
     ///     Attempts to find a user with the specified ID.

@@ -1,6 +1,7 @@
 using Humanizer;
 using Microsoft.AspNetCore.Mvc;
 using OliverBooth.Data.Blog;
+using OliverBooth.Data.Web;
 using OliverBooth.Services;
 
 namespace OliverBooth.Controllers.Blog;
@@ -14,14 +15,14 @@ namespace OliverBooth.Controllers.Blog;
 public sealed class BlogApiController : ControllerBase
 {
     private readonly IBlogPostService _blogPostService;
-    private readonly IBlogUserService _userService;
+    private readonly IUserService _userService;
 
     /// <summary>
     ///     Initializes a new instance of the <see cref="BlogApiController" /> class.
     /// </summary>
     /// <param name="blogPostService">The <see cref="IBlogPostService" />.</param>
-    /// <param name="userService">The <see cref="IBlogUserService" />.</param>
-    public BlogApiController(IBlogPostService blogPostService, IBlogUserService userService)
+    /// <param name="userService">The <see cref="IUserService" />.</param>
+    public BlogApiController(IBlogPostService blogPostService, IUserService userService)
     {
         _blogPostService = blogPostService;
         _userService = userService;

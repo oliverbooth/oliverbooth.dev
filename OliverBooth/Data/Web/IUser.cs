@@ -1,4 +1,4 @@
-namespace OliverBooth.Data.Blog;
+namespace OliverBooth.Data.Web;
 
 /// <summary>
 ///     Represents a user which can log in to the blog.
