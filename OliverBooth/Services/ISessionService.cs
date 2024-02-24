@@ -28,6 +28,18 @@ public interface ISessionService
     void DeleteSession(ISession session);
 
     /// <summary>
+    ///     Saves a session cookie to the client's browser.
+    /// </summary>
+    /// <param name="response">The response to edit.</param>
+    /// <param name="session">The session to write.</param>
+    /// <exception cref="ArgumentNullException">
+    ///     <para><paramref name="request" /> is <see langword="null" />.</para>
+    ///     -or-
+    ///     <para><paramref name="session" /> is <see langword="null" />.</para>
+    /// </exception>
+    void SaveSessionCookie(HttpResponse response, ISession session);
+    
+    /// <summary>
     ///     Attempts to find a session with the specified ID.
     /// </summary>
     /// <param name="sessionId">The session ID.</param>

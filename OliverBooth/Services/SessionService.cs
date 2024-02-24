@@ -64,6 +64,20 @@ internal sealed class SessionService : ISessionService
     }
 
     /// <inheritdoc />
+    public void SaveSessionCookie(HttpResponse response, ISession session)
+    {
+        if (response is null) throw new ArgumentNullException(nameof(response));
+        if (session is null) throw new ArgumentNullException(nameof(session));
+
+        Span<byte> buffer = stackalloc byte[16];
+        if (!session.Id.TryWriteBytes(buffer)) return;
+
+        IPAddress? remoteIpAddress = response.HttpContext.Connection.RemoteIpAddress;
+        _logger.LogDebug("Writing cookie 'sid' to HTTP response for {RemoteAddr}", remoteIpAddress);
+        response.Cookies.Append("sid", Convert.ToBase64String(buffer));
+    }
+
+    /// <inheritdoc />
     public bool TryGetSession(Guid sessionId, [NotNullWhen(true)] out ISession? session)
     {
         using WebContext context = _webContextFactory.CreateDbContext();

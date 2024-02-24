@@ -60,9 +60,7 @@ public sealed class AdminController : ControllerBase
         }
 
         ISession session = _sessionService.CreateSession(Request, user);
-        Span<byte> sessionBytes = stackalloc byte[16];
-        session.Id.TryWriteBytes(sessionBytes);
-        Response.Cookies.Append("sid", Convert.ToBase64String(sessionBytes));
+        _sessionService.SaveSessionCookie(Response, session);
         return RedirectToPage("/admin/index");
     }
 
