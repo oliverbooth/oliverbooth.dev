@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
 using OliverBooth.Data.Web;
@@ -31,6 +32,44 @@ public sealed class AuthenticationController : ControllerBase
         _logger = logger;
         _sessionService = sessionService;
         _userService = userService;
+    }
+
+    /// <summary>
+    ///     Authorizes a multi-factor login request using the specified token and TOTP.
+    /// </summary>
+    /// <param name="token">The token.</param>
+    /// <param name="totp">The time-based one-time password.</param>
+    /// <returns>The result of the authentication process.</returns>
+    public IActionResult DoMultiFactor([FromForm(Name = "token")] string token, [FromForm(Name = "totp")] string totp)
+    {
+        string epName = nameof(DoMultiFactor);
+        if (Request.HttpContext.Connection.RemoteIpAddress is not { } ip)
+        {
+            _logger.LogWarning("Endpoint {Name} reached with no remote IP!", epName);
+            return BadRequest();
+        }
+
+        MfaRequestResult result = _userService.VerifyMfaRequest(token, totp, out IUser? user);
+        switch (result)
+        {
+            case MfaRequestResult.InvalidTotp:
+                return RedirectToPage("/admin/multifactorstep", new { token, result = (int)result });
+
+            case MfaRequestResult.TokenExpired:
+                return RedirectToPage("/admin/login", new { result = (int)result });
+
+            case MfaRequestResult.TooManyAttempts:
+                return RedirectToPage("/admin/login", new { result = (int)result });
+        }
+
+        Debug.Assert(user is not null);
+
+        _userService.DeleteToken(token);
+
+        ISession session = _sessionService.CreateSession(Request, user);
+        _sessionService.SaveSessionCookie(Response, session);
+        _logger.LogInformation("MFA request from {Host} with login {Login} succeeded", ip, user.EmailAddress);
+        return RedirectToPage("/admin/index");
     }
 
     /// <summary>
@@ -73,6 +112,14 @@ public sealed class AuthenticationController : ControllerBase
         {
             _logger.LogInformation("Login attempt from {Host} with login {Login} failed", ip, emailAddress);
             return redirectResult;
+        }
+
+        if (!string.IsNullOrWhiteSpace(user.Totp))
+        {
+            // mfa required
+            _logger.LogInformation("Login attempt from {Host} with login {Login} requires MFA", ip, emailAddress);
+            IMfaToken token = _userService.CreateMfaToken(user);
+            return RedirectToPage("/admin/multifactorstep", new { token = token.Token });
         }
 
         ISession session = _sessionService.CreateSession(Request, user);

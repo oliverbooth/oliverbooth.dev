@@ -81,4 +81,15 @@ public interface IUser
     ///     <see langword="false" />.
     /// </returns>
     bool TestCredentials(string password);
+
+    /// <summary>
+    ///     Tests the specified TOTP with the user's current TOTP.
+    /// </summary>
+    /// <param name="value">The TOTP to test.</param>
+    /// <returns>
+    ///     <see langword="true" /> if the specified time-based one-time password matches that of the user; otherwise,
+    ///     <see langword="false" />.
+    /// </returns>
+    /// <exception cref="ArgumentNullException"><paramref name="value" /> is <see langword="null" />.</exception>
+    bool TestTotp(string value);
 }

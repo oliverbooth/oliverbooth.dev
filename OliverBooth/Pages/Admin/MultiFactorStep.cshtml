@@ -1,0 +1,35 @@
+@page "/admin/login/mfa"
+@using OliverBooth.Data.Web
+@model OliverBooth.Pages.Admin.MultiFactorStep
+
+@{
+    ViewData["Title"] = "2FA Step";
+}
+
+<div class="m-auto" style="max-width: 330px; padding: 1rem;">
+    @if (Model.Result.HasValue)
+    {
+        var result = (MfaRequestResult)Model.Result.Value;
+        switch (result)
+        {
+            case MfaRequestResult.InvalidTotp:
+                <div class="alert alert-danger">
+                    <p class="lead">Error</p>
+                    <p>The code you entered is invalid.</p>
+                </div>
+                break;
+        }
+    }
+
+    <form method="post" asp-controller="Authentication" asp-action="DoMultiFactor" asp-route-version="1">
+        <h1 class="h3 mb-3 fw-normal">Please enter 2FA code</h1>
+
+        <div class="form-floating">
+            <input type="hidden" name="token" value="@Model.Token">
+            <input type="text" class="form-control" id="totp" name="totp" placeholder="e.g. 123456">
+            <label for="totp">2FA code</label>
+        </div>
+
+        <button class="btn btn-primary w-100 py-2" type="submit">Verify</button>
+    </form>
+</div>

@@ -3,6 +3,7 @@ using System.Security.Cryptography;
 using System.Text;
 using Cysharp.Text;
 using OliverBooth.Data.Blog;
+using OtpNet;
 
 namespace OliverBooth.Data.Web;
 
@@ -96,5 +97,13 @@ internal sealed class User : IUser, IBlogAuthor
     public bool TestCredentials(string password)
     {
         return false;
+    }
+
+    /// <inheritdoc />
+    public bool TestTotp(string value)
+    {
+        byte[]? key = Base32Encoding.ToBytes(Totp);
+        var totp = new Totp(key);
+        return totp.VerifyTotp(value, out _, VerificationWindow.RfcSpecifiedNetworkDelay);
     }
 }
