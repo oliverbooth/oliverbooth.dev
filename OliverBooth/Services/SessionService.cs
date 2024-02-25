@@ -170,7 +170,7 @@ internal sealed class SessionService : BackgroundService, ISessionService
             return false;
         }
 
-        if (_userService.TryGetUser(session.UserId, out _))
+        if (!_userService.TryGetUser(session.UserId, out _))
         {
             return false;
         }
