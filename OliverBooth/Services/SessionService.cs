@@ -98,7 +98,7 @@ internal sealed class SessionService : BackgroundService, ISessionService
 
         IPAddress? remoteIpAddress = response.HttpContext.Connection.RemoteIpAddress;
         _logger.LogDebug("Writing cookie 'sid' to HTTP response for {RemoteAddr}", remoteIpAddress);
-        response.Cookies.Append("sid", Convert.ToBase64String(buffer));
+        response.Cookies.Append("sid", Convert.ToBase64String(buffer), new CookieOptions { Expires = DateTimeOffset.UtcNow + TimeSpan.FromDays(30) });
     }
 
     /// <inheritdoc />
