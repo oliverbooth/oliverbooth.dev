@@ -72,6 +72,13 @@ public sealed class AdminController : ControllerBase
             _sessionService.DeleteSession(session);
         }
 
-        return _sessionService.DeleteSessionCookie(Response);
+        _sessionService.DeleteSessionCookie(Response);
+
+        if (Request.Headers.Referer is var referer && !string.IsNullOrWhiteSpace(referer.ToString()))
+        {
+            return Redirect(referer!);
+        }
+
+        return RedirectToPage("/admin/login");
     }
 }
