@@ -41,12 +41,17 @@ internal sealed class BlogPostService : IBlogPostService
     }
 
     /// <inheritdoc />
-    public IReadOnlyList<IBlogPost> GetAllBlogPosts(int limit = -1)
+    public IReadOnlyList<IBlogPost> GetAllBlogPosts(int limit = -1,
+        BlogPostVisibility visibility = BlogPostVisibility.Published)
     {
         using BlogContext context = _dbContextFactory.CreateDbContext();
-        IQueryable<BlogPost> ordered = context.BlogPosts
-            .Where(p => p.Visibility == BlogPostVisibility.Published)
-            .OrderByDescending(post => post.Published);
+        IQueryable<BlogPost> ordered = context.BlogPosts;
+        if (visibility != (BlogPostVisibility)(-1))
+        {
+            ordered = ordered.Where(p => p.Visibility == visibility);
+        }
+
+        ordered = ordered.OrderByDescending(post => post.Published);
         if (limit > -1)
         {
             ordered = ordered.Take(limit);

@@ -12,12 +12,14 @@ public interface IBlogPostService
     ///     Returns a collection of all blog posts.
     /// </summary>
     /// <param name="limit">The maximum number of posts to return. A value of -1 returns all posts.</param>
+    /// <param name="visibility">The visibility of the posts to retrieve.</param>
     /// <returns>A collection of all blog posts.</returns>
     /// <remarks>
     ///     This method may slow down execution if there are a large number of blog posts being requested. It is
     ///     recommended to use <see cref="GetBlogPosts" /> instead.
     /// </remarks>
-    IReadOnlyList<IBlogPost> GetAllBlogPosts(int limit = -1);
+    IReadOnlyList<IBlogPost> GetAllBlogPosts(int limit = -1,
+        BlogPostVisibility visibility = BlogPostVisibility.Published);
 
     /// <summary>
     ///     Returns the total number of blog posts.
