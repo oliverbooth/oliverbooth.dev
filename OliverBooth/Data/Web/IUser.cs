@@ -36,6 +36,12 @@ public interface IUser
     DateTimeOffset Registered { get; }
 
     /// <summary>
+    ///     Gets the permissions this user is granted.
+    /// </summary>
+    /// <value>A read-only view of the permissions this user is granted.</value>
+    IReadOnlyList<Permission> Permissions { get; }
+
+    /// <summary>
     ///     Gets the user's TOTP token.
     /// </summary>
     /// <value>The TOTP token.</value>
@@ -47,6 +53,24 @@ public interface IUser
     /// <param name="size">The size of the avatar.</param>
     /// <returns>The URL of the user's avatar.</returns>
     Uri GetAvatarUrl(int size = 28);
+
+    /// <summary>
+    ///     Determines whether the user has the specified permission.
+    /// </summary>
+    /// <param name="permission">The permission to test.</param>
+    /// <returns>
+    ///     <see langword="true" /> if the user has the specified permission; otherwise, <see langword="false" />.
+    /// </returns>
+    bool HasPermission(Permission permission);
+
+    /// <summary>
+    ///     Determines whether the user has the specified permission.
+    /// </summary>
+    /// <param name="permission">The permission to test.</param>
+    /// <returns>
+    ///     <see langword="true" /> if the user has the specified permission; otherwise, <see langword="false" />.
+    /// </returns>
+    bool HasPermission(string permission);
 
     /// <summary>
     ///     Returns a value indicating whether the specified password is valid for the user.

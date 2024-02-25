@@ -1,6 +1,5 @@
 using Microsoft.EntityFrameworkCore;
 using OliverBooth.Data.Blog.Configuration;
-using OliverBooth.Data.Web;
 
 namespace OliverBooth.Data.Blog;
 

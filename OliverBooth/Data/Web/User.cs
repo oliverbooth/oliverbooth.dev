@@ -25,6 +25,9 @@ internal sealed class User : IUser, IBlogAuthor
     public Guid Id { get; private set; } = Guid.NewGuid();
 
     /// <inheritdoc />
+    public IReadOnlyList<Permission> Permissions { get; private set; } = ArraySegment<Permission>.Empty;
+
+    /// <inheritdoc />
     public DateTimeOffset Registered { get; private set; } = DateTimeOffset.UtcNow;
 
     /// <inheritdoc />
@@ -73,6 +76,20 @@ internal sealed class User : IUser, IBlogAuthor
         }
 
         return new Uri($"https://www.gravatar.com/avatar/{builder}?size={size}");
+    }
+
+    /// <inheritdoc />
+    public bool HasPermission(Permission permission)
+    {
+        return HasPermission(permission.Name);
+    }
+
+    /// <inheritdoc />
+    public bool HasPermission(string permission)
+    {
+        return (Permissions.Any(p => p.IsAllowed && p.Name == permission) ||
+                Permissions.Any(p => p is { IsAllowed: true, Name: "*" })) &&
+               !Permissions.Any(p => !p.IsAllowed && p.Name == permission);
     }
 
     /// <inheritdoc />

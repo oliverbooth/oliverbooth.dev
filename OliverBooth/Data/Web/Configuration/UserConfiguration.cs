@@ -18,5 +18,6 @@ internal sealed class UserConfiguration : IEntityTypeConfiguration<User>
         builder.Property(e => e.Salt).HasMaxLength(255).IsRequired();
         builder.Property(e => e.Registered).IsRequired();
         builder.Property(e => e.Totp);
+        builder.Property(e => e.Permissions).HasConversion<PermissionListConverter>();
     }
 }
