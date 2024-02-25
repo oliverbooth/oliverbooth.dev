@@ -1,6 +1,10 @@
 @using OliverBooth.Data.Blog
+@using OliverBooth.Data.Web
 @using OliverBooth.Services
 @inject IBlogPostService BlogPostService
+@inject IUserService UserService
+@inject ISessionService SessionService
+
 @{
     HttpRequest request = Context.Request;
     var url = new Uri($"{request.Scheme}://{request.Host}{request.Path}{request.QueryString}");
@@ -129,6 +133,15 @@
         <ul class="footer-nav" style="margin-top: 20px;">
             <li>&copy; @DateTime.UtcNow.Year</li>
             <li><a asp-page="/privacy/index">Privacy</a></li>
+            @if (SessionService.TryGetSession(Context.Request, out ISession? session) &&
+                 UserService.TryGetUser(session.UserId, out _))
+            {
+                <li><a asp-page="/admin/index">Dashboard</a></li>
+            }
+            else
+            {
+                <li><a asp-page="/admin/login">Login</a></li>
+            }
         </ul>
     </div>
 </footer>
