@@ -151,6 +151,12 @@ internal sealed class SessionService : ISessionService
             return false;
         }
 
+        if (session.Expires <= DateTimeOffset.UtcNow)
+        {
+            _logger.LogInformation("Session {Id} has expired (client {Ip})", session.Id, remoteIpAddress);
+            return false;
+        }
+
         Span<byte> remoteAddressBytes = stackalloc byte[16];
         Span<byte> sessionAddressBytes = stackalloc byte[16];
         if (!remoteIpAddress.TryWriteBytes(remoteAddressBytes, out _) ||
