@@ -9,7 +9,7 @@
 
     <ItemGroup>
         <PackageReference Include="Alexinea.Extensions.Configuration.Toml" Version="7.0.0"/>
-        <PackageReference Include="Asp.Versioning.Mvc" Version="8.0.0" />
+        <PackageReference Include="Asp.Versioning.Mvc" Version="8.0.0"/>
         <PackageReference Include="AspNetCore.ReCaptcha" Version="1.7.0"/>
         <PackageReference Include="BCrypt.Net-Core" Version="1.6.0"/>
         <PackageReference Include="HtmlAgilityPack" Version="1.11.59"/>
