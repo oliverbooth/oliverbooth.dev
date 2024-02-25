@@ -1,3 +1,4 @@
+using Asp.Versioning;
 using AspNetCore.ReCaptcha;
 using Markdig;
 using OliverBooth.Data.Blog;
@@ -30,6 +31,14 @@ builder.Services.AddSingleton(provider => new MarkdownPipelineBuilder()
     .UseEmojiAndSmiley()
     .UseSmartyPants()
     .Build());
+
+builder.Services.AddApiVersioning(options =>
+{
+    options.AssumeDefaultVersionWhenUnspecified = true;
+    options.DefaultApiVersion = new ApiVersion(1);
+    options.ReportApiVersions = true;
+    options.ApiVersionReader = new UrlSegmentApiVersionReader();
+});
 
 builder.Services.AddDbContextFactory<BlogContext>();
 builder.Services.AddDbContextFactory<WebContext>();

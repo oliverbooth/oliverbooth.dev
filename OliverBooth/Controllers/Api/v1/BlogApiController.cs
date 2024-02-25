@@ -1,17 +1,19 @@
+using Asp.Versioning;
 using Humanizer;
 using Microsoft.AspNetCore.Mvc;
 using OliverBooth.Data.Blog;
 using OliverBooth.Data.Web;
 using OliverBooth.Services;
 
-namespace OliverBooth.Controllers.Api;
+namespace OliverBooth.Controllers.Api.v1;
 
 /// <summary>
 ///     Represents a controller for the blog API.
 /// </summary>
 [ApiController]
-[Route("api/blog")]
+[Route("api/v{version:apiVersion}/blog")]
 [Produces("application/json")]
+[ApiVersion(1)]
 public sealed class BlogApiController : ControllerBase
 {
     private readonly IBlogPostService _blogPostService;
