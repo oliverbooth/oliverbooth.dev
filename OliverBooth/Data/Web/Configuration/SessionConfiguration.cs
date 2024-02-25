@@ -17,6 +17,7 @@ internal sealed class SessionConfiguration : IEntityTypeConfiguration<Session>
         builder.Property(e => e.Updated).IsRequired();
         builder.Property(e => e.LastAccessed).IsRequired();
         builder.Property(e => e.Expires).IsRequired();
+        builder.Property(e => e.UserAgent).HasMaxLength(255).IsRequired();
         builder.Property(e => e.UserId);
         builder.Property(e => e.IpAddress).HasConversion<IPAddressToBytesConverter>().IsRequired();
         builder.Property(e => e.RequiresTotp).IsRequired();

@@ -50,6 +50,12 @@ public interface ISession
     DateTimeOffset Updated { get; }
 
     /// <summary>
+    ///     Gets the user agent string associated with this session.
+    /// </summary>
+    /// <value>The user agent string.</value>
+    string UserAgent { get; }
+
+    /// <summary>
     ///     Gets the user ID associated with the session.
     /// </summary>
     /// <value>The user ID.</value>

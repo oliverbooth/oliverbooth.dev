@@ -55,7 +55,8 @@ internal sealed class SessionService : BackgroundService, ISessionService
             Updated = now,
             LastAccessed = now,
             Expires = now + TimeSpan.FromDays(1),
-            RequiresTotp = !string.IsNullOrWhiteSpace(user.Totp)
+            RequiresTotp = !string.IsNullOrWhiteSpace(user.Totp),
+            UserAgent = request.Headers.UserAgent.ToString()
         };
         EntityEntry<Session> entry = context.Sessions.Add(session);
         context.SaveChanges();
@@ -110,7 +111,7 @@ internal sealed class SessionService : BackgroundService, ISessionService
     public bool TryGetCurrentUser(HttpRequest request, HttpResponse response, [NotNullWhen(true)] out IUser? user)
     {
         user = null;
-        
+
         if (!TryGetSession(request, out ISession? session))
         {
             _logger.LogDebug("Session not found; redirecting");
@@ -203,16 +204,29 @@ internal sealed class SessionService : BackgroundService, ISessionService
         if (!remoteIpAddress.TryWriteBytes(remoteAddressBytes, out _) ||
             !session.IpAddress.TryWriteBytes(sessionAddressBytes, out _))
         {
+            _logger.LogWarning("Failed to write bytes for session {Id}", session.Id);
             return false;
         }
 
         if (!remoteAddressBytes.SequenceEqual(sessionAddressBytes))
         {
+            _logger.LogInformation("Session {Id} has IP mismatch (wanted {Expected}, got {Actual})", session.Id,
+                session.IpAddress, remoteIpAddress);
+            return false;
+        }
+
+        var userAgent = request.Headers.UserAgent.ToString();
+        if (session.UserAgent != userAgent)
+        {
+            _logger.LogInformation("Session {Id} has user agent mismatch (wanted {Expected}, got {Actual})", session.Id,
+                session.UserAgent, userAgent);
             return false;
         }
 
         if (!_userService.TryGetUser(session.UserId, out _))
         {
+            _logger.LogWarning("User {Id} not found for session {Session} (client {Ip})", session.UserId, session.Id,
+                remoteIpAddress);
             return false;
         }
 

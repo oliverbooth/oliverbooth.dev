@@ -26,5 +26,8 @@ internal sealed class Session : ISession
     public DateTimeOffset Updated { get; set; }
 
     /// <inheritdoc />
+    public string UserAgent { get; set; } = string.Empty;
+
+    /// <inheritdoc />
     public Guid UserId { get; set; }
 }
