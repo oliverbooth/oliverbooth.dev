@@ -161,13 +161,19 @@ internal sealed class SessionService : BackgroundService, ISessionService
         Span<byte> sessionAddressBytes = stackalloc byte[16];
         if (!remoteIpAddress.TryWriteBytes(remoteAddressBytes, out _) ||
             !session.IpAddress.TryWriteBytes(sessionAddressBytes, out _))
+        {
             return false;
+        }
 
         if (!remoteAddressBytes.SequenceEqual(sessionAddressBytes))
+        {
             return false;
+        }
 
         if (_userService.TryGetUser(session.UserId, out _))
+        {
             return false;
+        }
 
         return true;
     }
