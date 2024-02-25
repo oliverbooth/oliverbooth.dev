@@ -4,7 +4,7 @@ using OliverBooth.Data.Blog;
 using OliverBooth.Data.Web;
 using OliverBooth.Services;
 
-namespace OliverBooth.Controllers.Blog;
+namespace OliverBooth.Controllers.Api;
 
 /// <summary>
 ///     Represents a controller for the blog API.
