@@ -28,6 +28,13 @@ public interface ISessionService
     void DeleteSession(ISession session);
 
     /// <summary>
+    ///     Deletes the client's session cookie.
+    /// </summary>
+    /// <param name="response">The response to edit.</param>
+    /// <exception cref="ArgumentNullException"><paramref name="response" /> is <see langword="null" />.</exception>
+    IActionResult DeleteSessionCookie(HttpResponse response);
+
+    /// <summary>
     ///     Saves a session cookie to the client's browser.
     /// </summary>
     /// <param name="response">The response to edit.</param>

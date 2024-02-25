@@ -71,6 +71,13 @@ internal sealed class SessionService : BackgroundService, ISessionService
     }
 
     /// <inheritdoc />
+    public IActionResult DeleteSessionCookie(HttpResponse response)
+    {
+        response.Cookies.Delete("sid");
+        return new RedirectToPageResult("/Admin/Login");
+    }
+
+    /// <inheritdoc />
     public void SaveSessionCookie(HttpResponse response, ISession session)
     {
         if (response is null)
