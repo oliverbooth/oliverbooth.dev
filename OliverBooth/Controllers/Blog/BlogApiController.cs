@@ -56,7 +56,10 @@ public sealed class BlogApiController : ControllerBase
     [HttpGet("author/{id:guid}")]
     public IActionResult GetAuthor(Guid id)
     {
-        if (!_userService.TryGetUser(id, out IUser? author)) return NotFound();
+        if (!_userService.TryGetUser(id, out IUser? author))
+        {
+            return NotFound();
+        }
 
         return Ok(new
         {
@@ -69,7 +72,11 @@ public sealed class BlogApiController : ControllerBase
     [HttpGet("post/{id:guid?}")]
     public IActionResult GetPost(Guid id)
     {
-        if (!_blogPostService.TryGetPost(id, out IBlogPost? post)) return NotFound();
+        if (!_blogPostService.TryGetPost(id, out IBlogPost? post))
+        {
+            return NotFound();
+        }
+
         return Ok(CreatePostObject(post, true));
     }
 
