@@ -31,7 +31,7 @@
     }
     @if (ViewData["Post"] is IBlogPost post)
     {
-        string excerpt = BlogPostService.RenderExcerpt(post, out bool trimmed);
+        string excerpt = BlogPostService.RenderExcerpt(post, out _);
         <meta name="title" content="@post.Title">
         <meta name="description" content="@excerpt">
         <meta property="og:title" content="@post.Title">
