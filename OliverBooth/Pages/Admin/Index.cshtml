@@ -1,8 +1,58 @@
 @page
+@using System.Reflection
 @model OliverBooth.Pages.Admin.Index
 
 @{
     ViewData["Title"] = "Admin";
+    Layout = "Shared/_AdminLayout";
 }
 
-<h1>Hello @Model.CurrentUser.DisplayName!</h1>
+<div class="row">
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-primary shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                            <i class="fa-solid fa-globe fa-fw"></i>
+                            Site Version
+                        </div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">@(Assembly.GetAssembly(typeof(Program))?.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion)</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-primary shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-uppercase mb-1" style="color: #512bd4">
+                            <i class="fa-solid fa-screwdriver-wrench fa-fw"></i>
+                            CLR Version
+                        </div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">@(Environment.Version)</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-primary shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                            <i class="fa-solid fa-server fa-fw"></i>
+                            Host Version
+                        </div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">@(Environment.OSVersion)</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

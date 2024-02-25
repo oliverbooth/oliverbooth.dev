@@ -1,0 +1,154 @@
+@using System.Diagnostics
+@using OliverBooth.Data.Blog
+@using OliverBooth.Data.Web
+@using OliverBooth.Services
+@inject IBlogPostService BlogPostService
+@inject IUserService UserService
+@inject ISessionService SessionService
+
+@{
+    HttpRequest request = Context.Request;
+    var url = new Uri($"{request.Scheme}://{request.Host}{request.Path}{request.QueryString}");
+    var currentPage = ViewContext.RouteData.Values["page"]?.ToString();
+
+    SessionService.TryGetSession(request, out ISession? session);
+    IUser? user = null;
+    if (session is not null)
+    {
+        UserService.TryGetUser(session.UserId, out user);
+    }
+    Debug.Assert(user is not null);
+}
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="dark">
+    <meta name="theme-color" content="#007EC6">
+    <meta property="og:image" content="@Url.Content("~/img/favicon.png")">
+    <meta property="twitter:image" content="@Url.Content("~/img/favicon.png")">
+    <meta property="og:url" content="@url">
+    <meta property="twitter:url" content="@url">
+    <meta property="twitter:card" content="summary">
+    @if (ViewData["Title"] != null)
+    {
+        <title>@ViewData["Title"] - Oliver Booth</title>
+    }
+    else
+    {
+        <title>Oliver Booth</title>
+    }
+    @if (ViewData["Post"] is IBlogPost post)
+    {
+        string excerpt = BlogPostService.RenderExcerpt(post, out bool trimmed);
+        <meta name="title" content="@post.Title">
+        <meta name="description" content="@excerpt">
+        <meta property="og:title" content="@post.Title">
+        <meta property="og:description" content="@excerpt">
+        <meta property="og:type" content="article">
+        <meta property="twitter:title" content="@post.Title">
+        <meta property="twitter:creator" content="@post.Author.DisplayName">
+        <meta property="twitter:description" content="@excerpt">
+    }
+    else
+    {
+        <meta name="title" content="@(ViewData["Title"] != null ? $"{ViewData["Title"]} - Oliver Booth" : "Oliver Booth")">
+        <meta name="description" content="Coffee enthusiast and lover of all things tech. Tech enthusiast and lover of all things coffee.">
+        <meta property="og:title" content="@(ViewData["Title"] != null ? $"{ViewData["Title"]} - Oliver Booth" : "Oliver Booth")">
+        <meta property="og:description" content="Coffee enthusiast and lover of all things tech. Tech enthusiast and lover of all things coffee.">
+        <meta property="twitter:title" content="@(ViewData["Title"] != null ? $"{ViewData["Title"]} - Oliver Booth" : "Oliver Booth")">
+        <meta property="twitter:description" content="Coffee enthusiast and lover of all things tech. Tech enthusiast and lover of all things coffee.">
+    }
+    <link rel="shortcut icon" href="/img/favicon.png" asp-append-version="true">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.1/css/bootstrap.min.css" integrity="sha512-Z/def5z5u2aR89OuzYcxmDJ0Bnd5V1cKqBEbvLOiUNWdg9PQeXVvXLI90SE4QOHGlfLqUnDNVAYyZi8UwUTmWQ==" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.8/katex.min.css" integrity="sha512-7nTa5CnxbzfQgjQrNmHXB7bxGTUVO/DcYX6rpgt06MkzM0rVXP3EYCv/Ojxg5H0dKbY7llbbYaqgfZjnGOAWGA==" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" integrity="sha512-c42qTSw/wPZ3/5LBzD+Bw5f7bSF2oxou6wEb+I/lqeaKV5FDIfMvvRp772y4jcJLKuGUOpbJMdg/BTl50fJYAw==" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@100;400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Gabarito:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="~/css/prism.min.css" asp-append-version="true">
+    <link rel="stylesheet" href="~/css/prism.vs.min.css" asp-append-version="true">
+    <link rel="stylesheet" href="~/css/ribbon.min.css" asp-append-version="true">
+    <link rel="stylesheet" href="~/css/admin.min.css" asp-append-version="true">
+    @await RenderSectionAsync("Styles", required: false)
+</head>
+<body>
+<main class="d-flex flex-nowrap">
+    <div class="d-flex flex-column flex-shrink-0 p-3 text-bg-dark" style="width: 280px;">
+        <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
+            <img src="~/img/ob-256x256.png" asp-append-version="true" style="height: 1.5rem; margin-right: 10px; vertical-align: middle">
+            <span class="fs-4">Oliver Booth</span>
+        </a>
+        <hr>
+        <ul class="nav nav-pills flex-column mb-auto">
+            <li class="nav-item">
+
+                @{
+                }
+                <a asp-page="Index" class="nav-link @(currentPage == "/Admin/Index" ? "active" : "text-white")" aria-current="page">
+                    <i class="fa-solid fa-gauge fa-fw"></i> Dashboard
+                </a>
+            </li>
+            <li>
+                <a asp-page="BlogPosts" class="nav-link @(currentPage == "/Admin/BlogPosts" ? "active" : "text-white")" aria-current="page">
+                    <i class="fa-solid fa-newspaper fa-fw"></i> Blog Posts
+                </a>
+            </li>
+            @if (user.HasPermission("projects:read"))
+            {
+                <li>
+                    <a asp-page="Projects" class="nav-link @(currentPage == "/Admin/Projects" ? "active" : "text-white")" aria-current="page">
+                        <i class="fa-solid fa-diagram-project fa-fw"></i> Projects
+                    </a>
+                </li>
+            }
+            @if (user.HasPermission("users:read"))
+            {
+                <li>
+                    <a asp-page="Users" class="nav-link @(currentPage == "/Admin/Users" ? "active" : "text-white")" aria-current="page">
+                        <i class="fa-solid fa-users fa-fw"></i> Users
+                    </a>
+                </li>
+            }
+        </ul>
+        <hr>
+        <div class="dropdown">
+            <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                <img src="@user.AvatarUrl" alt="" width="32" height="32" class="rounded-circle me-2">
+                <strong>@user.DisplayName</strong>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-dark text-small shadow">
+                <li><a class="dropdown-item" href="#">New project...</a></li>
+                <li><a class="dropdown-item" href="#">Settings</a></li>
+                <li><a class="dropdown-item" href="#">Profile</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" asp-controller="Admin" asp-action="Logout">Sign out</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="b-example-divider b-example-vr"></div>
+
+    <div class="flex-column flex-shrink-0 p-3 bg-body-tertiary" style="width: calc(100% - 280px); overflow-y: scroll">
+        @RenderBody()
+    </div>
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.1/js/bootstrap.bundle.min.js" integrity="sha512-ToL6UYWePxjhDQKNioSi4AyJ5KkRxY+F1+Fi7Jgh0Hp5Kk2/s8FD7zusJDdonfe5B00Qw+B8taXxF6CFLnqNCw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.8/katex.min.js" integrity="sha512-aoZChv+8imY/U1O7KIHXvO87EOzCuKO0GhFtpD6G2Cyjo/xPeTgdf3/bchB10iB+AojMTDkMHDPLKNxPJVqDcw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/js/all.min.js" integrity="sha512-uKQ39gEGiyUJl4AI6L+ekBdGKpGw4xJ55+xyJG7YFlJokPNYegn9KwQ3P8A7aFQAUtUsAQHep+d/lrGqrbPIDQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.8/handlebars.min.js" integrity="sha512-E1dSFxg+wsfJ4HKjutk/WaCzK7S2wv1POn1RRPGh8ZK+ag9l244Vqxji3r6wgz9YBf6+vhQEYJZpSjqWFPg9gg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="~/js/prism.min.js" asp-append-version="true" data-manual></script>
+<script src="~/js/app.min.js" asp-append-version="true"></script>
+
+<script id="loading-spinner-template" type="text/x-handlebars-template">
+    @await Html.PartialAsync("_LoadingSpinner")
+</script>
+
+@await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
