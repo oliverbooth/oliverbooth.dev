@@ -9,7 +9,7 @@ using ISession = OliverBooth.Data.Web.ISession;
 
 namespace OliverBooth.Services;
 
-internal sealed class SessionService : ISessionService
+internal sealed class SessionService : BackgroundService, ISessionService
 {
     private readonly ILogger<SessionService> _logger;
     private readonly IUserService _userService;
@@ -170,5 +170,13 @@ internal sealed class SessionService : ISessionService
             return false;
 
         return true;
+    }
+
+    /// <inheritdoc />
+    protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+    {
+        await using WebContext context = await _webContextFactory.CreateDbContextAsync(stoppingToken);
+        context.Sessions.RemoveRange(context.Sessions.Where(s => s.Expires <= DateTimeOffset.UtcNow));
+        await context.SaveChangesAsync(stoppingToken);
     }
 }
