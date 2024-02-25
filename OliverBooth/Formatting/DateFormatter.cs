@@ -18,13 +18,17 @@ public sealed class DateFormatter : IFormatter
     public bool TryEvaluateFormat(IFormattingInfo formattingInfo)
     {
         if (formattingInfo.CurrentValue is not string value)
+        {
             return false;
+        }
 
         if (!DateTime.TryParseExact(value, "yyyy-MM-dd",
                 CultureInfo.InvariantCulture,
                 DateTimeStyles.None,
                 out DateTime date))
+        {
             return false;
+        }
 
 
         formattingInfo.Write(date.ToString(formattingInfo.Format?.ToString(), CultureInfo.InvariantCulture));

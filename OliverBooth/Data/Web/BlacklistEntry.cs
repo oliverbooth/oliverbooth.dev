@@ -45,8 +45,16 @@ internal sealed class BlacklistEntry : IEquatable<BlacklistEntry>, IBlacklistEnt
     /// </returns>
     public bool Equals(BlacklistEntry? other)
     {
-        if (ReferenceEquals(null, other)) return false;
-        if (ReferenceEquals(this, other)) return true;
+        if (ReferenceEquals(null, other))
+        {
+            return false;
+        }
+
+        if (ReferenceEquals(this, other))
+        {
+            return true;
+        }
+
         return EmailAddress.Equals(other.EmailAddress);
     }
 

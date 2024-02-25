@@ -39,7 +39,9 @@ public class RawArticle : PageModel
 
         builder.AppendLine($"Published: {post.Published:R}");
         if (post.Updated.HasValue)
+        {
             builder.AppendLine($"Updated: {post.Updated:R}");
+        }
 
         builder.AppendLine();
         builder.AppendLine(post.Body);

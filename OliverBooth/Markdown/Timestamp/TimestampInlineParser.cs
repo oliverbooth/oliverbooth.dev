@@ -56,7 +56,11 @@ public sealed class TimestampInlineParser : InlineParser
         timestamp = default;
         format = default;
 
-        if (!source.StartsWith("<t:")) return false;
+        if (!source.StartsWith("<t:"))
+        {
+            return false;
+        }
+
         timestamp = source[3..];
 
         if (timestamp.IndexOf('>') == -1)

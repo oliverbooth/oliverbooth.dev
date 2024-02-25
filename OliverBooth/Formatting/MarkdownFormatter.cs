@@ -29,7 +29,9 @@ public sealed class MarkdownFormatter : IFormatter
     public bool TryEvaluateFormat(IFormattingInfo formattingInfo)
     {
         if (formattingInfo.CurrentValue is not string value)
+        {
             return false;
+        }
 
         var pipeline = _serviceProvider.GetService<MarkdownPipeline>();
         formattingInfo.Write(Markdig.Markdown.ToHtml(value, pipeline));

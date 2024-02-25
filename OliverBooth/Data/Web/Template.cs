@@ -47,8 +47,16 @@ public sealed class Template : ITemplate, IEquatable<Template>
     /// </returns>
     public bool Equals(Template? other)
     {
-        if (ReferenceEquals(null, other)) return false;
-        if (ReferenceEquals(this, other)) return true;
+        if (ReferenceEquals(null, other))
+        {
+            return false;
+        }
+
+        if (ReferenceEquals(this, other))
+        {
+            return true;
+        }
+
         return Name == other.Name && Variant == other.Variant;
     }
 

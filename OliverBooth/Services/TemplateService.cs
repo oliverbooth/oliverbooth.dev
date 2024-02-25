@@ -38,7 +38,10 @@ internal sealed class TemplateService : ITemplateService
     /// <inheritdoc />
     public string RenderGlobalTemplate(TemplateInline templateInline)
     {
-        if (templateInline is null) throw new ArgumentNullException(nameof(templateInline));
+        if (templateInline is null)
+        {
+            throw new ArgumentNullException(nameof(templateInline));
+        }
 
         return TryGetTemplate(templateInline.Name, templateInline.Variant, out ITemplate? template)
             ? RenderTemplate(templateInline, template)

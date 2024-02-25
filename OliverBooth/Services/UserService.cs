@@ -28,12 +28,19 @@ internal sealed class UserService : IUserService
     /// <inheritdoc />
     public bool TryGetUser(Guid id, [NotNullWhen(true)] out IUser? user)
     {
-        if (_userCache.TryGetValue(id, out user)) return true;
+        if (_userCache.TryGetValue(id, out user))
+        {
+            return true;
+        }
 
         using WebContext context = _dbContextFactory.CreateDbContext();
         user = context.Users.Find(id);
 
-        if (user is not null) _userCache.TryAdd(id, user);
+        if (user is not null)
+        {
+            _userCache.TryAdd(id, user);
+        }
+
         return user is not null;
     }
 

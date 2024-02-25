@@ -62,8 +62,14 @@ internal sealed class User : IUser, IBlogAuthor
         Span<char> hex = stackalloc char[2];
         for (var index = 0; index < hash.Length; index++)
         {
-            if (hash[index].TryFormat(hex, out _, "x2")) builder.Append(hex);
-            else builder.Append("00");
+            if (hash[index].TryFormat(hex, out _, "x2"))
+            {
+                builder.Append(hex);
+            }
+            else
+            {
+                builder.Append("00");
+            }
         }
 
         return new Uri($"https://www.gravatar.com/avatar/{builder}?size={size}");

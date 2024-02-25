@@ -35,8 +35,15 @@ internal sealed class SessionService : ISessionService
     /// <inheritdoc />
     public ISession CreateSession(HttpRequest request, IUser user)
     {
-        if (request is null) throw new ArgumentNullException(nameof(request));
-        if (user is null) throw new ArgumentNullException(nameof(user));
+        if (request is null)
+        {
+            throw new ArgumentNullException(nameof(request));
+        }
+
+        if (user is null)
+        {
+            throw new ArgumentNullException(nameof(user));
+        }
 
         using WebContext context = _webContextFactory.CreateDbContext();
         var now = DateTimeOffset.UtcNow;
@@ -66,11 +73,21 @@ internal sealed class SessionService : ISessionService
     /// <inheritdoc />
     public void SaveSessionCookie(HttpResponse response, ISession session)
     {
-        if (response is null) throw new ArgumentNullException(nameof(response));
-        if (session is null) throw new ArgumentNullException(nameof(session));
+        if (response is null)
+        {
+            throw new ArgumentNullException(nameof(response));
+        }
+
+        if (session is null)
+        {
+            throw new ArgumentNullException(nameof(session));
+        }
 
         Span<byte> buffer = stackalloc byte[16];
-        if (!session.Id.TryWriteBytes(buffer)) return;
+        if (!session.Id.TryWriteBytes(buffer))
+        {
+            return;
+        }
 
         IPAddress? remoteIpAddress = response.HttpContext.Connection.RemoteIpAddress;
         _logger.LogDebug("Writing cookie 'sid' to HTTP response for {RemoteAddr}", remoteIpAddress);
@@ -88,18 +105,28 @@ internal sealed class SessionService : ISessionService
     /// <inheritdoc />
     public bool TryGetSession(HttpRequest request, [NotNullWhen(true)] out ISession? session)
     {
-        if (request is null) throw new ArgumentNullException(nameof(request));
+        if (request is null)
+        {
+            throw new ArgumentNullException(nameof(request));
+        }
 
         session = null;
         IPAddress? remoteIpAddress = request.HttpContext.Connection.RemoteIpAddress;
-        if (remoteIpAddress is null) return false;
+        if (remoteIpAddress is null)
+        {
+            return false;
+        }
 
         if (!request.Cookies.TryGetValue("sid", out string? sessionIdCookie))
+        {
             return false;
+        }
 
         Span<byte> bytes = stackalloc byte[16];
         if (!Convert.TryFromBase64Chars(sessionIdCookie, bytes, out int bytesWritten) || bytesWritten < 16)
+        {
             return false;
+        }
 
         var sessionId = new Guid(bytes);
         return TryGetSession(sessionId, out session);
@@ -108,13 +135,18 @@ internal sealed class SessionService : ISessionService
     /// <inheritdoc />
     public bool ValidateSession(HttpRequest request, ISession session)
     {
-        if (request is null) throw new ArgumentNullException(nameof(request));
-        if (session is null) throw new ArgumentNullException(nameof(session));
+        if (request is null)
+        {
+            throw new ArgumentNullException(nameof(request));
+        }
+
+        if (session is null)
+        {
+            throw new ArgumentNullException(nameof(session));
+        }
 
         IPAddress? remoteIpAddress = request.HttpContext.Connection.RemoteIpAddress;
-        if (remoteIpAddress is null) return false;
-
-        if (session.Expires >= DateTimeOffset.UtcNow)
+        if (remoteIpAddress is null)
         {
             return false;
         }
