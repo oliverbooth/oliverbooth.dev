@@ -5,13 +5,7 @@
     ViewData["Title"] = "Login";
 }
 
-@section Styles
-{
-    <link rel="stylesheet" href="~/css/admin.min.css" asp-append-version="true">
-}
-
-<div class="form-signin m-auto">
-
+<div class="m-auto" style="max-width: 330px; padding: 1rem;">
     <form method="post" asp-controller="Admin" asp-action="Login">
         <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
 
@@ -26,5 +20,4 @@
 
         <button class="btn btn-primary w-100 py-2" type="submit">Sign in</button>
     </form>
-
 </div>

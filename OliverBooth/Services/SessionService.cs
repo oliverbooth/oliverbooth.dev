@@ -102,6 +102,35 @@ internal sealed class SessionService : BackgroundService, ISessionService
     }
 
     /// <inheritdoc />
+    public bool TryGetCurrentUser(HttpRequest request, HttpResponse response, [NotNullWhen(true)] out IUser? user)
+    {
+        user = null;
+        
+        if (!TryGetSession(request, out ISession? session))
+        {
+            _logger.LogDebug("Session not found; redirecting");
+            DeleteSessionCookie(response);
+            return false;
+        }
+
+        if (!ValidateSession(request, session))
+        {
+            _logger.LogDebug("Session invalid; redirecting");
+            DeleteSessionCookie(response);
+            return false;
+        }
+
+        if (!_userService.TryGetUser(session.UserId, out user))
+        {
+            _logger.LogDebug("User not found; redirecting");
+            DeleteSessionCookie(response);
+            return false;
+        }
+
+        return true;
+    }
+
+    /// <inheritdoc />
     public bool TryGetSession(Guid sessionId, [NotNullWhen(true)] out ISession? session)
     {
         using WebContext context = _webContextFactory.CreateDbContext();

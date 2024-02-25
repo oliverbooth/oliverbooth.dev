@@ -2,20 +2,15 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using OliverBooth.Data.Web;
 using OliverBooth.Services;
-using ISession = OliverBooth.Data.Web.ISession;
 
 namespace OliverBooth.Pages.Admin;
 
 public class Index : PageModel
 {
-    private readonly ILogger<Index> _logger;
-    private readonly IUserService _userService;
     private readonly ISessionService _sessionService;
 
-    public Index(ILogger<Index> logger, IUserService userService, ISessionService sessionService)
+    public Index(ISessionService sessionService)
     {
-        _logger = logger;
-        _userService = userService;
         _sessionService = sessionService;
     }
 
@@ -23,22 +18,9 @@ public class Index : PageModel
 
     public IActionResult OnGet()
     {
-        if (!_sessionService.TryGetSession(Request, out ISession? session))
+        if (!_sessionService.TryGetCurrentUser(Request, Response, out IUser? user))
         {
-            _logger.LogDebug("Session not found; redirecting");
-            return _sessionService.DeleteSessionCookie(Response);
-        }
-
-        if (!_sessionService.ValidateSession(Request, session))
-        {
-            _logger.LogDebug("Session invalid; redirecting");
-            return _sessionService.DeleteSessionCookie(Response);
-        }
-
-        if (!_userService.TryGetUser(session.UserId, out IUser? user))
-        {
-            _logger.LogDebug("User not found; redirecting");
-            return _sessionService.DeleteSessionCookie(Response);
+            return RedirectToPage("/admin/login");
         }
 
         CurrentUser = user;

@@ -45,7 +45,26 @@ public interface ISessionService
     ///     <para><paramref name="session" /> is <see langword="null" />.</para>
     /// </exception>
     void SaveSessionCookie(HttpResponse response, ISession session);
-    
+
+    /// <summary>
+    ///     Attempts to find the user associated with the client's current request.
+    /// </summary>
+    /// <param name="request">The HTTP request.</param>
+    /// <param name="response">The response to edit.</param>
+    /// <param name="user">
+    ///     When this method returns, contains the user with the specified request, if the user is found; otherwise,
+    ///     <see langword="null" />.
+    /// </param>
+    /// <returns>
+    ///     <see langword="true" /> if a user is found; otherwise, <see langword="false" />.
+    /// </returns>
+    /// <exception cref="ArgumentNullException">
+    ///     <para><paramref name="request" /> is <see langword="null" />.</para>
+    ///     -or-
+    ///     <para><paramref name="response" /> is <see langword="null" />.</para>
+    /// </exception>
+    bool TryGetCurrentUser(HttpRequest request, HttpResponse response, [NotNullWhen(true)] out IUser? user);
+
     /// <summary>
     ///     Attempts to find a session with the specified ID.
     /// </summary>
