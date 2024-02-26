@@ -12,12 +12,26 @@
 
 <input type="hidden" data-blog-pid="@post.Id">
 
-<button id="save-button" class="btn btn-primary"><i class="fa-solid fa-floppy-disk fa-fw"></i> Save <span class="text-muted">(Ctrl+S)</span></button>
-<a href="/blog/@post.Published.ToString(@"yyyy\/MM\/dd")/@post.Slug" target="_blank" class="btn btn-info"><i class="fa-solid fa-magnifying-glass"></i> Preview</a>
+<div style="margin-bottom: 20px;">
+    <button id="save-button" class="btn btn-primary"><i class="fa-solid fa-floppy-disk fa-fw"></i> Save <span class="text-muted">(Ctrl+S)</span></button>
+    <a href="/blog/@post.Published.ToString(@"yyyy\/MM\/dd")/@post.Slug" target="_blank" class="btn btn-info"><i class="fa-solid fa-magnifying-glass"></i> Preview</a>
+</div>
+
+<table class="table">
+    <tr>
+        <th>Post ID</th>
+        <td><input class="form-control" type="text" value="@post.Id" disabled="disabled"></td>
+    </tr>
+    <tr>
+        <th>Title</th>
+        <td><input class="form-control" id="post-title" type="text" value="@post.Title"></td>
+    </tr>
+</table>
 
 <div class="row" style="margin-top: 20px;">
-    <div class="col-md-6 col-sm-12">
-        <textarea id="content" style="width: 100%; font-family: monospace; min-height: calc(100vh - 80px); max-height: 100%">@post.Body</textarea>
+    <div id="editing-area" class="col-md-6 col-sm-12">
+        <textarea id="content" spellcheck="false">@post.Body</textarea>
+        <pre id="highlighting" aria-hidden="true"><code id="highlighting-content" class="language-markdown">@post.Body</code></pre>
     </div>
     <div class="col-md-6 col-sm-12" style="overflow-y: scroll; background: #1E1E1E">
         <article id="article-preview" style="background: #333; max-width: 700px; margin: 20px auto; padding: 20px;">
