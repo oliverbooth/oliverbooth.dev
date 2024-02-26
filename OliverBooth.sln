@@ -26,15 +26,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "scss", "scss", "{822F528E-3
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ts", "ts", "{BB9F76AC-292A-4F47-809D-8BBBA6E0A048}"
 	ProjectSection(SolutionItems) = preProject
-		src\ts\app.ts = src\ts\app.ts
 		src\ts\prism.js = src\ts\prism.js
-		src\ts\API.ts = src\ts\API.ts
-		src\ts\BlogPost.ts = src\ts\BlogPost.ts
-		src\ts\Author.ts = src\ts\Author.ts
-		src\ts\TimeUtility.ts = src\ts\TimeUtility.ts
-		src\ts\UI.ts = src\ts\UI.ts
-		src\ts\Input.ts = src\ts\Input.ts
-		src\ts\BlogUrl.ts = src\ts\BlogUrl.ts
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "img", "img", "{8996BEBA-0D9C-4D76-9117-8E4E89148A1A}"
@@ -43,6 +35,23 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "img", "img", "{8996BEBA-0D9
 		src\img\headshot_512x512_2023.jpg = src\img\headshot_512x512_2023.jpg
 		src\img\ob-256x256.png = src\img\ob-256x256.png
 		src\img\oliverbooth-704x330.png = src\img\oliverbooth-704x330.png
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "admin", "admin", "{183CDB1F-371D-4A24-8F96-1DF0967995E4}"
+	ProjectSection(SolutionItems) = preProject
+		src\ts\admin\admin.ts = src\ts\admin\admin.ts
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "app", "app", "{A6590915-CB40-43EA-B0A3-EDEC63769780}"
+	ProjectSection(SolutionItems) = preProject
+		src\ts\app\API.ts = src\ts\app\API.ts
+		src\ts\app\app.ts = src\ts\app\app.ts
+		src\ts\app\Author.ts = src\ts\app\Author.ts
+		src\ts\app\BlogPost.ts = src\ts\app\BlogPost.ts
+		src\ts\app\BlogUrl.ts = src\ts\app\BlogUrl.ts
+		src\ts\app\Input.ts = src\ts\app\Input.ts
+		src\ts\app\TimeUtility.ts = src\ts\app\TimeUtility.ts
+		src\ts\app\UI.ts = src\ts\app\UI.ts
 	EndProjectSection
 EndProject
 Global
@@ -60,5 +69,7 @@ Global
 		{822F528E-3CA7-4B7D-9250-BD248ADA7BAE} = {8A323E64-E41E-4780-99FD-17BF58961FB5}
 		{BB9F76AC-292A-4F47-809D-8BBBA6E0A048} = {8A323E64-E41E-4780-99FD-17BF58961FB5}
 		{8996BEBA-0D9C-4D76-9117-8E4E89148A1A} = {8A323E64-E41E-4780-99FD-17BF58961FB5}
+		{183CDB1F-371D-4A24-8F96-1DF0967995E4} = {BB9F76AC-292A-4F47-809D-8BBBA6E0A048}
+		{A6590915-CB40-43EA-B0A3-EDEC63769780} = {BB9F76AC-292A-4F47-809D-8BBBA6E0A048}
 	EndGlobalSection
 EndGlobal

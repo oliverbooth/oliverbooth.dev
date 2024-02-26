@@ -5,6 +5,8 @@ const rename = require("gulp-rename");
 const ts = require("gulp-typescript");
 const terser = require("gulp-terser");
 const webpack = require("webpack-stream");
+const path = require("path");
+const named = require("vinyl-named");
 
 const srcDir = "src";
 const destDir = "OliverBooth/wwwroot";
@@ -25,8 +27,9 @@ function compileTS() {
 }
 
 function bundleJS() {
-    return gulp.src("tmp/js/*.js")
-        .pipe(webpack({ mode: "production", output: { filename: "app.min.js" } }))
+    return gulp.src(["tmp/js/*.js", "tmp/js/app/app.js", "tmp/js/admin/admin.js"])
+        .pipe(named())
+        .pipe(webpack({ mode: "production", output: { filename: "[name].min.js" } }))
         .pipe(gulp.dest(`${destDir}/js`));
 }
 
