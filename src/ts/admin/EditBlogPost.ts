@@ -52,7 +52,7 @@ declare const Prism: any;
             saveButton.setAttribute("disabled", "disabled");
             saveButton.innerHTML = '<i class="fa-solid fa-spinner fa-spin fa-fw"></i> Saving ...';
 
-            post = await API.updatePost(post, content.value);
+            post = await API.updatePost(post, {content: content.value, title: title.value});
 
             saveButton.classList.add("btn-success");
             saveButton.classList.remove("btn-primary");

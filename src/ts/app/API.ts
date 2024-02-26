@@ -30,9 +30,9 @@ class API {
         return new Author(response);
     }
 
-    static async updatePost(post: BlogPost, content: string): Promise<BlogPost> {
+    static async updatePost(post: BlogPost, options: any): Promise<BlogPost> {
         try {
-            await API.patch(`/post/${post.id}`, {body: content});
+            await API.patch(`/post/${post.id}`, {body: JSON.stringify(options)});
         } catch {
             return post;
         }

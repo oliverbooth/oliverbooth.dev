@@ -70,10 +70,10 @@ public interface IBlogPost
     IReadOnlyList<string> Tags { get; }
 
     /// <summary>
-    ///     Gets the title of the post.
+    ///     Gets or sets the title of the post.
     /// </summary>
     /// <value>The title of the post.</value>
-    string Title { get; }
+    string Title { get; set; }
 
     /// <summary>
     ///     Gets the date and time the post was last updated.

@@ -38,7 +38,7 @@ internal sealed class BlogPost : IBlogPost
     public IReadOnlyList<string> Tags { get; internal set; } = ArraySegment<string>.Empty;
 
     /// <inheritdoc />
-    public string Title { get; internal set; } = string.Empty;
+    public string Title { get; set; } = string.Empty;
 
     /// <inheritdoc />
     public DateTimeOffset? Updated { get; internal set; }

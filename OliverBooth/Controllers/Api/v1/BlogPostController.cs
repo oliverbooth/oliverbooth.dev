@@ -1,4 +1,5 @@
 using System.Text;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
@@ -42,10 +43,15 @@ public sealed class BlogPostController : ControllerBase
             return new JsonResult(new { status = 404, message = "Not Found" });
         }
 
-        using var reader = new StreamReader(Request.Body, Encoding.UTF8);
-        string content = await reader.ReadToEndAsync();
+        var body = await JsonSerializer.DeserializeAsync<Dictionary<string, string>>(Request.Body);
+        if (body is null)
+        {
+            Response.StatusCode = 400;
+            return new JsonResult(new { status = 400, message = "Bad Request" });
+        }
 
-        post.Body = content;
+        post.Body = body["content"];
+        post.Title = body["title"];
         _blogPostService.UpdatePost(post);
 
         return new JsonResult(new { status = 200, message = "OK" });
