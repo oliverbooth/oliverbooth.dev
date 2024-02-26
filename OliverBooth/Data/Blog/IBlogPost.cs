@@ -12,10 +12,10 @@ public interface IBlogPost
     IBlogAuthor Author { get; }
 
     /// <summary>
-    ///     Gets the body of the post.
+    ///     Gets or sets the body of the post.
     /// </summary>
     /// <value>The body of the post.</value>
-    string Body { get; }
+    string Body { get; set; }
 
     /// <summary>
     ///     Gets a value indicating whether comments are enabled for the post.

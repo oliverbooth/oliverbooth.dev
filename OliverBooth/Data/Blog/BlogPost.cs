@@ -11,7 +11,7 @@ internal sealed class BlogPost : IBlogPost
     public IBlogAuthor Author { get; internal set; } = null!;
 
     /// <inheritdoc />
-    public string Body { get; internal set; } = string.Empty;
+    public string Body { get; set; } = string.Empty;
 
     /// <inheritdoc />
     public bool EnableComments { get; internal set; }

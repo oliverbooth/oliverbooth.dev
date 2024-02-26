@@ -161,6 +161,19 @@ internal sealed class BlogPostService : IBlogPostService
         return true;
     }
 
+    /// <inheritdoc />
+    public void UpdatePost(IBlogPost post)
+    {
+        if (post is null)
+        {
+            throw new ArgumentNullException(nameof(post));
+        }
+
+        using BlogContext context = _dbContextFactory.CreateDbContext();
+        context.Update(post);
+        context.SaveChanges();
+    }
+
     private BlogPost CacheAuthor(BlogPost post)
     {
         // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract

@@ -1,4 +1,43 @@
-.form-signin {
-  max-width: 330px;
-  padding: 1rem;
+body {
+  min-height: 100vh;
+}
+
+html {
+  min-height: 100vh;
+}
+
+main {
+  height: 100vh;
+  max-height: 100vh;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.card {
+  background: #FFFFFF;
+  color: #1E1E1E;
+}
+
+.btn.btn-orange {
+  background: orange;
+  color: #000;
+}
+
+table {
+  td, th {
+    vertical-align: middle;
+  }
+}
+
+pre {
+  background: #1e1e1e;
+
+  code mark, code mark span {
+    background: #d8ba76 !important;
+    color: #000 !important;
+  }
+}
+
+code[class*="language-"] {
+  background: none !important;
 }

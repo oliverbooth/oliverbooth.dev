@@ -40,6 +40,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "admin", "admin", "{183CDB1F-371D-4A24-8F96-1DF0967995E4}"
 	ProjectSection(SolutionItems) = preProject
 		src\ts\admin\admin.ts = src\ts\admin\admin.ts
+		src\ts\admin\EditBlogPost.ts = src\ts\admin\EditBlogPost.ts
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "app", "app", "{A6590915-CB40-43EA-B0A3-EDEC63769780}"

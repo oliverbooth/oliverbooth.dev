@@ -1,0 +1,86 @@
+@page "/admin/blog-posts"
+@using System.Diagnostics
+@using OliverBooth.Data
+@using OliverBooth.Data.Blog
+@using OliverBooth.Data.Web
+@using OliverBooth.Services
+@model OliverBooth.Pages.Admin.BlogPosts
+@inject IBlogPostService BlogPostService
+@inject IUserService UserService
+@inject ISessionService SessionService
+
+@{
+    ViewData["Title"] = "Blog Posts";
+    Layout = "Shared/_AdminLayout";
+    
+    HttpRequest request = HttpContext.Request;
+    SessionService.TryGetSession(request, out ISession? session);
+    IUser? user = null;
+    if (session is not null)
+    {
+        UserService.TryGetUser(session.UserId, out user);
+    }
+    Debug.Assert(user is not null);
+}
+
+<div class="row">
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-primary shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                            <i class="fa-solid fa-globe fa-fw"></i>
+                            Total Blog Posts
+                        </div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">
+                            @BlogPostService.GetBlogPostCount()
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<table class="table">
+    <thead>
+    <tr>
+        <th>Title</th>
+        <th>Posted</th>
+        <th>Author</th>
+        <th>Options</th>
+    </tr>
+    </thead>
+    
+    <tbody>
+    @foreach (IBlogPost post in BlogPostService.GetAllBlogPosts(visibility: (BlogPostVisibility)(-1)))
+    {
+        if (post.Visibility != BlogPostVisibility.Published && post.Author.Id != user.Id && !user.HasPermission(Permission.Administrator))
+        {
+            continue;
+        }
+
+        string icon = post.Visibility switch
+        {
+            BlogPostVisibility.Private => "key text-danger",
+            BlogPostVisibility.Unlisted => "unlock text-warning",
+            BlogPostVisibility.Published => "circle-check text-success"
+        };
+
+        <tr data-post-id="@post.Id.ToString("N")">
+            <td><i class="fa-solid fa-fw fa-@icon" title="@post.Visibility"></i> @post.Title</td>
+            <td>@post.Published</td>
+            <td><img src="@post.Author.AvatarUrl" class="rounded-circle me-2"> @post.Author.DisplayName</td>
+            <td>
+                <a asp-page="EditBlogPost" asp-route-id="@post.Id" class="btn btn-info">
+                    <i class="fa-solid fa-pen-to-square"></i>
+                </a>
+                <a asp-controller="BlogAdmin" asp-action="DeletePost" asp-route-pid="@post.Id" class="btn btn-danger">
+                    <i class="fa-solid fa-trash"></i>
+                </a>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>

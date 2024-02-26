@@ -1,0 +1,27 @@
+@page "/admin/blog-posts/edit/{id}"
+@using Markdig
+@using OliverBooth.Data.Blog
+@model OliverBooth.Pages.Admin.EditBlogPost
+@inject MarkdownPipeline MarkdownPipeline
+
+@{
+    Layout = "Shared/_AdminLayout";
+    ViewData["Title"] = "Edit Post";
+    IBlogPost post = Model.BlogPost;
+}
+
+<input type="hidden" data-blog-pid="@post.Id">
+
+<button id="save-button" class="btn btn-primary"><i class="fa-solid fa-floppy-disk fa-fw"></i> Save <span class="text-muted">(Ctrl+S)</span></button>
+<a href="/blog/@post.Published.ToString(@"yyyy\/MM\/dd")/@post.Slug" target="_blank" class="btn btn-info"><i class="fa-solid fa-magnifying-glass"></i> Preview</a>
+
+<div class="row" style="margin-top: 20px;">
+    <div class="col-md-6 col-sm-12">
+        <textarea id="content" style="width: 100%; font-family: monospace; min-height: calc(100vh - 80px); max-height: 100%">@post.Body</textarea>
+    </div>
+    <div class="col-md-6 col-sm-12" style="overflow-y: scroll; background: #1E1E1E">
+        <article id="article-preview" style="background: #333; max-width: 700px; margin: 20px auto; padding: 20px;">
+            @Html.Raw(Markdown.ToHtml(post.Body, MarkdownPipeline))
+        </article>
+    </div>
+</div>

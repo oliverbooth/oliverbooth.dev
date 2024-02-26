@@ -110,4 +110,11 @@ public interface IBlogPostService
     /// </returns>
     /// <exception cref="ArgumentNullException"><paramref name="slug" /> is <see langword="null" />.</exception>
     bool TryGetPost(DateOnly publishDate, string slug, [NotNullWhen(true)] out IBlogPost? post);
+
+    /// <summary>
+    ///     Updates the specified post.
+    /// </summary>
+    /// <param name="post">The post to edit.</param>
+    /// <exception cref="ArgumentNullException"><paramref name="post" /> is <see langword="null" />.</exception>
+    void UpdatePost(IBlogPost post);
 }
