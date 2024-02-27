@@ -127,3 +127,7 @@ textarea {
     display: none;
   }
 }
+
+table.table tr:hover td {
+  background-color: rgba(#03A9F4, 10%);
+}
