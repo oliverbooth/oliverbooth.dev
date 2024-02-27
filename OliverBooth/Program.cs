@@ -53,6 +53,8 @@ builder.Services.AddHostedSingleton<IUserService, UserService>();
 builder.Services.AddHostedSingleton<ISessionService, SessionService>();
 builder.Services.AddRazorPages().AddRazorRuntimeCompilation();
 builder.Services.AddControllersWithViews();
+builder.Services.AddRazorComponents().AddInteractiveServerComponents();
+builder.Services.AddServerSideBlazor().AddInteractiveServerComponents();
 builder.Services.AddRouting(options => options.LowercaseUrls = true);
 builder.Services.AddReCaptcha(builder.Configuration.GetSection("ReCaptcha"));
 
@@ -78,5 +80,6 @@ app.UseAuthorization();
 
 app.MapControllers();
 app.MapRazorPages();
+app.MapBlazorHub();
 
 app.Run();
