@@ -70,12 +70,12 @@ textarea {
 }
 
 #highlighting, #content {
-  margin: 10px;
   padding: 10px;
   border: 0;
-  width: calc(100% - 32px);
-  height: 500px;
+  width: 100%;
+  height: 100%;
   position: relative;
+  margin: 0;
 }
 
 #highlighting, #content, #highlighting * {
@@ -85,7 +85,6 @@ textarea {
 }
 
 #highlighting {
-  margin-top: -511px;
   z-index: 0;
   background: #1E1E1E;
 }
@@ -99,8 +98,32 @@ textarea {
   overflow-wrap: normal;
   overflow-x: scroll;
   white-space: pre;
+  
+  &:focus {
+    outline: none;
+  }
 }
 
 #highlighting-content, #highlighting-content code {
   white-space: pre !important;
+}
+
+#content, .highlighting-container .code-toolbar {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+.highlighting-container {
+  display: grid;
+  max-width: 50%;
+  max-height: calc(100vh - 35px);
+  overflow: scroll;
+}
+
+.highlighting-container .code-toolbar {
+  height: 100%;
+  
+  .toolbar {
+    display: none;
+  }
 }
