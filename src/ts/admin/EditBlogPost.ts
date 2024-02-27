@@ -1,8 +1,8 @@
 import BlogPost from "../app/BlogPost";
 import API from "../app/API";
 import UI from "../app/UI";
-
-declare const Prism: any;
+import AdminUI from "./AdminUI";
+import "./TabSupport"
 
 (() => {
     getCurrentBlogPost().then(post => {
@@ -10,14 +10,12 @@ declare const Prism: any;
             return;
         }
 
-        const saveButton = document.getElementById("save-button") as HTMLButtonElement;
-        const preview = document.getElementById("article-preview") as HTMLAnchorElement;
-        const content = document.getElementById("content") as HTMLTextAreaElement;
-        const title = document.getElementById("post-title") as HTMLInputElement;
-        const highlighting = document.getElementById("highlighting");
-        const highlightingContent = document.getElementById("highlighting-content");
+        AdminUI.init();
 
-        saveButton.addEventListener("click", async (e: MouseEvent) => {
+        const preview = document.getElementById("article-preview") as HTMLAnchorElement;
+        const title = document.getElementById("post-title") as HTMLInputElement;
+
+        AdminUI.saveButton.addEventListener("click", async (e: MouseEvent) => {
             await savePost();
         });
 
@@ -31,28 +29,15 @@ declare const Prism: any;
             }
         });
 
-        content.addEventListener("keydown", async (e: KeyboardEvent) => {
-            if (e.key === "Tab") {
-                e.preventDefault();
-
-                const start = content.selectionStart;
-                const end = content.selectionEnd;
-                const text = content.value;
-                content.value = `${text.slice(0, start)}    ${text.slice(start, end)}`;
-                updateEditView();
-                content.selectionStart = start + 4;
-                content.selectionEnd = end ? end + 4 : start + 4;
-            }
-        });
-
         async function savePost(): Promise<void> {
+            const saveButton = AdminUI.saveButton;
             saveButton.classList.add("btn-primary");
             saveButton.classList.remove("btn-success");
 
             saveButton.setAttribute("disabled", "disabled");
             saveButton.innerHTML = '<i class="fa-solid fa-spinner fa-spin fa-fw"></i> Saving ...';
 
-            post = await API.updatePost(post, {content: content.value, title: title.value});
+            post = await API.updatePost(post, {content: AdminUI.content.value, title: title.value});
 
             saveButton.classList.add("btn-success");
             saveButton.classList.remove("btn-primary");
@@ -66,33 +51,7 @@ declare const Prism: any;
             }, 2000);
         }
 
-        updateEditView();
-        content.addEventListener("input", () => updateEditView());
-        content.addEventListener("scroll", () => syncEditorScroll());
-        function updateEditView() {
-            highlightingContent.innerHTML = Prism.highlight(content.value, Prism.languages.markdown);
-            document.querySelectorAll("#highlighting-content span.token.code").forEach(el => {
-                const languageSpan = el.querySelector(".code-language") as HTMLSpanElement;
-                if (!languageSpan) {
-                    return;
-                }
-
-                const language = languageSpan.innerText;
-                const span = el.querySelector(".code-block");
-                if (!span) {
-                    return;
-                }
-
-                span.outerHTML = `<code class="${span.className} language-${language}" style="padding:0;">${span.innerHTML}</code>`;
-                Prism.highlightAllUnder(highlightingContent);
-            });
-            syncEditorScroll();
-        }
-        
-        function syncEditorScroll() {
-            highlighting.scrollTop = content.scrollTop;
-            highlighting.scrollLeft = content.scrollLeft;
-        }
+        AdminUI.updateEditView();
     });
 
     async function getCurrentBlogPost(): Promise<BlogPost> {
