@@ -1,4 +1,5 @@
 const gulp = require("gulp");
+const fs = require("fs");
 const sass = require('gulp-sass')(require("sass"));
 const cleanCSS = require("gulp-clean-css");
 const rename = require("gulp-rename");
@@ -26,11 +27,17 @@ function compileTS() {
         .pipe(gulp.dest(`tmp/js`));
 }
 
-function bundleJS() {
-    return gulp.src(["tmp/js/*.js", "tmp/js/app/app.js", "tmp/js/admin/admin.js"])
-        .pipe(named())
-        .pipe(webpack({ mode: "production", output: { filename: "[name].min.js" } }))
-        .pipe(gulp.dest(`${destDir}/js`));
+function bundleJS(done) {
+    const tasks = fs.readdirSync("tmp/js", {withFileTypes: true})
+        .filter(dirent => dirent.isDirectory())
+        .map(d => bundleDir(d.name));
+    return gulp.parallel(...tasks)(done);
+
+    function bundleDir(directory) {
+        return () => gulp.src(`tmp/js/${directory}/${directory}.js`)
+            .pipe(webpack({mode: "production", output: {filename: `${directory}.min.js`}}))
+            .pipe(gulp.dest(`${destDir}/js`));
+    }
 }
 
 function copyJS() {
