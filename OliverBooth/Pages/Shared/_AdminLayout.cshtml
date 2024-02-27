@@ -1,4 +1,3 @@
-@using System.Diagnostics
 @using OliverBooth.Data.Blog
 @using OliverBooth.Data.Web
 @using OliverBooth.Services
@@ -17,7 +16,6 @@
     {
         UserService.TryGetUser(session.UserId, out user);
     }
-    Debug.Assert(user is not null);
 }
 <!DOCTYPE html>
 <html lang="en" data-bs-theme="dark">
@@ -98,7 +96,7 @@
                     <i class="fa-solid fa-newspaper fa-fw"></i> Blog Posts
                 </a>
             </li>
-            @if (user.HasPermission("projects:read"))
+            @if (user?.HasPermission("projects:read") != true)
             {
                 <li>
                     <a asp-page="Projects" class="nav-link @(currentPage == "/Admin/Projects" ? "active" : "text-white")" aria-current="page">
@@ -106,7 +104,7 @@
                     </a>
                 </li>
             }
-            @if (user.HasPermission("users:read"))
+            @if (user?.HasPermission("users:read") != true)
             {
                 <li>
                     <a asp-page="Users" class="nav-link @(currentPage == "/Admin/Users" ? "active" : "text-white")" aria-current="page">
@@ -118,8 +116,8 @@
         <hr>
         <div class="dropdown">
             <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                <img src="@user.AvatarUrl" alt="" width="32" height="32" class="rounded-circle me-2">
-                <strong>@user.DisplayName</strong>
+                <img src="@user?.AvatarUrl" alt="" width="32" height="32" class="rounded-circle me-2">
+                <strong>@user?.DisplayName</strong>
             </a>
             <ul class="dropdown-menu dropdown-menu-dark text-small shadow">
                 <li><a class="dropdown-item" href="#">New project...</a></li>
