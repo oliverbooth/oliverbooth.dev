@@ -25,6 +25,8 @@ import SaveButtonMode from "./MarkdownEditor/SaveButtonMode";
             await Interop.invoke("Save", post.id, UI.markdownInput.value);
             post = await API.getBlogPost(post.id);
             UI.setSaveButtonMode(SaveButtonMode.SAVED);
+            UI.setPreviewContent(post.content);
+            UI.redraw();
 
             setTimeout(() => UI.setSaveButtonMode(SaveButtonMode.NORMAL), 2000);
         }

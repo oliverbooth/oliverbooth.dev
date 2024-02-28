@@ -1,3 +1,4 @@
+import SharedUI from "../../app/UI";
 import SaveButtonMode from "./SaveButtonMode";
 
 /**
@@ -12,6 +13,7 @@ class UI {
     private static _highlighting: HTMLElement;
     private static _content: HTMLTextAreaElement;
     private static _saveButton: HTMLButtonElement;
+    private static _preview: HTMLElement;
 
     private static _saveCallbacks: Function[] = [];
 
@@ -38,6 +40,7 @@ class UI {
      * Initializes the editor's user interface.
      */
     public static init() {
+        UI._preview = document.getElementById("article-preview");
         UI._saveButton = document.getElementById("save-button") as HTMLButtonElement;
         UI._content = document.getElementById("content") as HTMLTextAreaElement;
         UI._highlightingContent = document.getElementById("highlighting-content");
@@ -74,6 +77,15 @@ class UI {
         });
 
         UI.syncEditorScroll();
+    }
+
+    /**
+     * Sets the HTML content of the preview section.
+     * @param html The HTML content.
+     */
+    public static setPreviewContent(html: string): void {
+        UI._preview.innerHTML = html;
+        SharedUI.updateUI(UI._preview);
     }
 
     /**
