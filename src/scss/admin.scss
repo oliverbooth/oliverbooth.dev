@@ -126,6 +126,6 @@ textarea {
   }
 }
 
-table.table tr:hover td {
+table.table.highlight-on-hover tr:hover td {
   background-color: rgba(#03A9F4, 10%);
 }
