@@ -5,7 +5,7 @@ import SaveButtonMode from "./SaveButtonMode";
  */
 class UI {
     private static readonly SB_ColorClasses = ["danger", "primary", "primary", "success"];
-    private static readonly SB_IconClasses = ["exclamation", "floppy-disk", "spinner fa-spin", "circle-check"];
+    private static readonly SB_IconClasses = ["exclamation", "floppy-disk", "spinner spin", "circle-check"];
     private static readonly SB_Text = ["Error Saving", "Save <span class=\"text-muted\">(Ctrl+S)</span>", "Saving ...", "Saved"];
 
     private static _highlightingContent: HTMLElement;
@@ -38,12 +38,14 @@ class UI {
      * Initializes the editor's user interface.
      */
     public static init() {
-        const content = UI._content;
+        UI._saveButton = document.getElementById("save-button") as HTMLButtonElement;
+        UI._content = document.getElementById("content") as HTMLTextAreaElement;
         UI._highlightingContent = document.getElementById("highlighting-content");
         UI._highlighting = document.getElementById("highlighting");
-        content.addEventListener("input", () => UI.redraw());
-        content.addEventListener("scroll", () => UI.syncEditorScroll());
-        
+
+        UI._content.addEventListener("input", () => UI.redraw());
+        UI._content.addEventListener("scroll", () => UI.syncEditorScroll());
+
         UI._saveButton.addEventListener("click", (_: MouseEvent) => {
             UI._saveCallbacks.forEach(fn => fn());
         });
@@ -83,15 +85,20 @@ class UI {
             throw new Error("Invalid display mode");
         }
 
-        UI._saveButton.innerHTML = UI.SB_Text[mode];
-        UI.SB_ColorClasses.concat(UI.SB_IconClasses).forEach(c => UI._saveButton.classList.remove(c));
-        UI._saveButton.classList.add(UI.SB_ColorClasses[mode]);
-        UI._saveButton.classList.add(UI.SB_IconClasses[mode]);
+        const button = UI._saveButton;
+        button.innerHTML = `<i class="fa-solid fa-fw"></i> ${UI.SB_Text[+mode]}`;
 
-        if (mode === SaveButtonMode.NORMAL) {
-            UI._saveButton.removeAttribute("disabled");
+        const icon = button.querySelector("i");
+        button.classList.remove(...UI.SB_ColorClasses.map(v => v.split(' ').map(c => `btn-${c}`).reduce((a, b) => a.concat(b))));
+        icon.classList.remove(...UI.SB_IconClasses.map(v => v.split(' ').map(c => `fa-${c}`).reduce((a, b) => a.concat(b))));
+
+        UI.SB_ColorClasses[+mode].split(' ').forEach(c => button.classList.add(`btn-${c}`));
+        UI.SB_IconClasses[+mode].split(' ').forEach(c => icon.classList.add(`fa-${c}`));
+
+        if (mode !== SaveButtonMode.SAVING) {
+            button.removeAttribute("disabled");
         } else {
-            UI._saveButton.setAttribute("disabled", "disabled");
+            button.setAttribute("disabled", "disabled");
         }
     }
 
