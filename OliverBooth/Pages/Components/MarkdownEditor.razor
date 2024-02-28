@@ -1,0 +1,37 @@
+@using OliverBooth.Services
+@using OliverBooth.Data.Blog
+@implements IDisposable
+@inject IBlogPostService BlogPostService
+@inject IJSRuntime JsRuntime
+
+@code {
+    private DotNetObjectReference<MarkdownEditor>? _dotNetHelper;
+
+    [JSInvokable]
+    public void Save(Guid id, string content)
+    {
+        if (!BlogPostService.TryGetPost(id, out IBlogPost? post))
+        {
+            return;
+        }
+
+        post.Body = content;
+        BlogPostService.UpdatePost(post);
+    }
+
+    public void Dispose()
+    {
+        _dotNetHelper?.Dispose();
+    }
+
+    /// <inheritdoc />
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            _dotNetHelper = DotNetObjectReference.Create(this);
+            await JsRuntime.InvokeVoidAsync("Interop.setDotNetHelper", _dotNetHelper);
+        }
+    }
+
+}

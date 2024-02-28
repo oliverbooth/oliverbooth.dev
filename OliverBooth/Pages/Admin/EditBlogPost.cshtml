@@ -10,6 +10,8 @@
     IBlogPost post = Model.BlogPost;
 }
 
+<component type="typeof(MarkdownEditor)" render-mode="Server"/>
+
 <input type="hidden" data-blog-pid="@post.Id">
 
 <div class="d-flex flex-column" style="height: calc(100vh - 35px)">
@@ -21,11 +23,15 @@
     <table class="table">
         <tr>
             <th>Post ID</th>
-            <td><input class="form-control" type="text" value="@post.Id" disabled="disabled"></td>
+            <td>
+                <input class="form-control" type="text" value="@post.Id" disabled="disabled">
+            </td>
         </tr>
         <tr>
             <th>Title</th>
-            <td><input class="form-control" id="post-title" type="text" value="@post.Title"></td>
+            <td>
+                <input class="form-control" id="post-title" type="text" value="@post.Title">
+            </td>
         </tr>
     </table>
 

@@ -1,8 +1,10 @@
 import BlogPost from "../app/BlogPost";
+import UI from "./MarkdownEditor/UI"
 import API from "../app/API";
-import UI from "../app/UI";
-import AdminUI from "./AdminUI";
 import "./TabSupport"
+import Interop from "./Interop";
+import MarkdownEditor from "./MarkdownEditor/MarkdownEditor";
+import SaveButtonMode from "./MarkdownEditor/SaveButtonMode";
 
 (() => {
     getCurrentBlogPost().then(post => {
@@ -10,48 +12,24 @@ import "./TabSupport"
             return;
         }
 
-        AdminUI.init();
+        UI.init();
+        UI.addSaveButtonListener(savePost);
 
-        const preview = document.getElementById("article-preview") as HTMLAnchorElement;
-        const title = document.getElementById("post-title") as HTMLInputElement;
-
-        AdminUI.saveButton.addEventListener("click", async (e: MouseEvent) => {
-            await savePost();
-        });
-
-        document.addEventListener("keydown", async (e: KeyboardEvent) => {
-            if (e.ctrlKey && e.key === "s") {
-                e.preventDefault();
-                await savePost();
-                preview.innerHTML = post.content;
-                UI.updateUI(preview);
-                // Prism.highlightAllUnder(preview);
-            }
-        });
+        const editor = new MarkdownEditor(UI.markdownInput);
+        editor.addSaveListener(savePost);
+        editor.registerDefaultShortcuts();
+        editor.registerEvents();
 
         async function savePost(): Promise<void> {
-            const saveButton = AdminUI.saveButton;
-            saveButton.classList.add("btn-primary");
-            saveButton.classList.remove("btn-success");
+            UI.setSaveButtonMode(SaveButtonMode.SAVING);
+            await Interop.invoke("Save", post.id, UI.markdownInput.value);
+            post = await API.getBlogPost(post.id);
+            UI.setSaveButtonMode(SaveButtonMode.SAVED);
 
-            saveButton.setAttribute("disabled", "disabled");
-            saveButton.innerHTML = '<i class="fa-solid fa-spinner fa-spin fa-fw"></i> Saving ...';
-
-            post = await API.updatePost(post, {content: AdminUI.content.value, title: title.value});
-
-            saveButton.classList.add("btn-success");
-            saveButton.classList.remove("btn-primary");
-            saveButton.removeAttribute("disabled");
-            saveButton.innerHTML = '<i class="fa-solid fa-circle-check fa-fw"></i> Saved';
-
-            setTimeout(() => {
-                saveButton.classList.add("btn-primary");
-                saveButton.classList.remove("btn-success");
-                saveButton.innerHTML = '<i class="fa-solid fa-floppy-disk fa-fw"></i> Save <span class="text-muted">(Ctrl+S)</span>';
-            }, 2000);
+            setTimeout(() => UI.setSaveButtonMode(SaveButtonMode.NORMAL), 2000);
         }
 
-        AdminUI.updateEditView();
+        UI.redraw();
     });
 
     async function getCurrentBlogPost(): Promise<BlogPost> {
