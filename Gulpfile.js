@@ -6,25 +6,31 @@ const noop = require("gulp-noop");
 const path = require("path");
 const rename = require("gulp-rename");
 const sass = require('gulp-sass')(require("sass"));
+const sourcemaps = require("gulp-sourcemaps");
 const ts = require("gulp-typescript");
 const terser = require("gulp-terser");
 const webpack = require("webpack-stream");
 
 const srcDir = "src";
 const destDir = "OliverBooth/wwwroot";
+const production = !process.env.DEVELOPMENT;
 
 function compileSCSS() {
     return gulp.src(`${srcDir}/scss/**/*.scss`)
+        .pipe(production ? sourcemaps.init() : noop())
         .pipe(sass().on("error", sass.logError))
         .pipe(cleanCSS({compatibility: "ie11"}))
         .pipe(rename({suffix: ".min"}))
+        .pipe(production ? sourcemaps.write() : noop())
         .pipe(gulp.dest(`${destDir}/css`));
 }
 
 function compileTS() {
     return gulp.src(`${srcDir}/ts/**/*.ts`)
+        .pipe(production ? sourcemaps.init() : noop())
         .pipe(ts("tsconfig.json"))
         .pipe(terser())
+        .pipe(production ? sourcemaps.write() : noop())
         .pipe(gulp.dest(`tmp/js`));
 }
 
@@ -36,7 +42,9 @@ function bundleJS(done) {
 
     function bundleDir(directory) {
         return () => gulp.src(`tmp/js/${directory}/${directory}.js`)
+            .pipe(production ? sourcemaps.init() : noop())
             .pipe(webpack({mode: "production", output: {filename: `${directory}.min.js`}}))
+            .pipe(production ? sourcemaps.write() : noop())
             .pipe(gulp.dest(`${destDir}/js`));
     }
 }
