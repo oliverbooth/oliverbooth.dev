@@ -76,9 +76,7 @@
                 <a asp-page="EditBlogPost" asp-route-id="@post.Id" class="btn btn-info">
                     <i class="fa-solid fa-pen-to-square"></i>
                 </a>
-                <a asp-controller="BlogAdmin" asp-action="DeletePost" asp-route-pid="@post.Id" class="btn btn-danger">
-                    <i class="fa-solid fa-trash"></i>
-                </a>
+                <button class="btn btn-danger"><i class="fa-solid fa-trash"></i></button>
             </td>
         </tr>
     }
