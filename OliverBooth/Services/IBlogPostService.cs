@@ -37,6 +37,14 @@ public interface IBlogPostService
     IReadOnlyList<IBlogPost> GetBlogPosts(int page, int pageSize = 10);
 
     /// <summary>
+    ///     Returns the drafts of this post, sorted by their update timestamp.
+    /// </summary>
+    /// <param name="post">The post whose drafts to return.</param>
+    /// <returns>The drafts of the <paramref name="post" />.</returns>
+    /// <exception cref="ArgumentNullException"><paramref name="post" /> is <see langword="null" />.</exception>
+    IReadOnlyList<IBlogPostDraft> GetDrafts(IBlogPost post);
+
+    /// <summary>
     ///     Returns the next blog post from the specified blog post.
     /// </summary>
     /// <param name="blogPost">The blog post whose next post to return.</param>

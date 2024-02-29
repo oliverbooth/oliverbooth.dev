@@ -41,6 +41,18 @@ internal sealed class BlogPostService : IBlogPostService
     }
 
     /// <inheritdoc />
+    public IReadOnlyList<IBlogPostDraft> GetDrafts(IBlogPost post)
+    {
+        if (post is null)
+        {
+            throw new ArgumentNullException(nameof(post));
+        }
+
+        using BlogContext context = _dbContextFactory.CreateDbContext();
+        return context.BlogPostDrafts.Where(d => d.Id == post.Id).OrderBy(d => d.Updated).ToArray();
+    }
+
+    /// <inheritdoc />
     public IReadOnlyList<IBlogPost> GetAllBlogPosts(int limit = -1,
         BlogPostVisibility visibility = BlogPostVisibility.Published)
     {
@@ -170,6 +182,8 @@ internal sealed class BlogPostService : IBlogPostService
         }
 
         using BlogContext context = _dbContextFactory.CreateDbContext();
+        BlogPost cached = context.BlogPosts.First(p => p.Id == post.Id);
+        context.BlogPostDrafts.Add(BlogPostDraft.CreateFromBlogPost(cached));
         context.Update(post);
         context.SaveChanges();
     }

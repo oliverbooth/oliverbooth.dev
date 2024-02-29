@@ -25,6 +25,12 @@ internal sealed class BlogContext : DbContext
     /// <value>The collection of blog posts.</value>
     public DbSet<BlogPost> BlogPosts { get; private set; } = null!;
 
+    /// <summary>
+    ///     Gets the collection of blog posts drafts in the database.
+    /// </summary>
+    /// <value>The collection of blog post drafts.</value>
+    public DbSet<BlogPostDraft> BlogPostDrafts { get; private set; } = null!;
+
     /// <inheritdoc />
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
@@ -37,5 +43,6 @@ internal sealed class BlogContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfiguration(new BlogPostConfiguration());
+        modelBuilder.ApplyConfiguration(new BlogPostDraftConfiguration());
     }
 }
