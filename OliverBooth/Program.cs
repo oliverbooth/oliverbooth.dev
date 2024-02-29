@@ -1,5 +1,8 @@
+using System.Security.Authentication;
 using Asp.Versioning;
 using AspNetCore.ReCaptcha;
+using FluentFTP;
+using FluentFTP.Logging;
 using Markdig;
 using OliverBooth.Data.Blog;
 using OliverBooth.Data.Web;
@@ -8,6 +11,7 @@ using OliverBooth.Markdown.Template;
 using OliverBooth.Markdown.Timestamp;
 using OliverBooth.Services;
 using Serilog;
+using Serilog.Extensions.Logging;
 using X10D.Hosting.DependencyInjection;
 
 Log.Logger = new LoggerConfiguration()
@@ -43,6 +47,25 @@ builder.Services.AddApiVersioning(options =>
 builder.Services.AddDbContextFactory<BlogContext>();
 builder.Services.AddDbContextFactory<WebContext>();
 builder.Services.AddHttpClient();
+builder.Services.AddTransient<IAsyncFtpClient, AsyncFtpClient>(provider =>
+{
+    var configuration = provider.GetRequiredService<IConfiguration>();
+    string? host = configuration["Cdn:Ftp:Host"];
+    string? username = configuration["Cdn:Ftp:Username"];
+    string? password = configuration["Cdn:Ftp:Password"];
+
+    if (string.IsNullOrWhiteSpace(host) || string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
+    {
+        throw new AuthenticationException("Configuration value missing for CDN FTP.");
+    }
+
+    var client = new AsyncFtpClient(host, username, password);
+    var loggerFactory = new SerilogLoggerFactory(Log.Logger);
+    client.Logger = new FtpLogAdapter(loggerFactory.CreateLogger("FTP"));
+    return client;
+});
+
+builder.Services.AddSingleton<ICdnService, CdnService>();
 builder.Services.AddSingleton<IContactService, ContactService>();
 builder.Services.AddSingleton<ITemplateService, TemplateService>();
 builder.Services.AddSingleton<IBlogPostService, BlogPostService>();
