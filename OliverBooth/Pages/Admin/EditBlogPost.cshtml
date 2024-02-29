@@ -11,8 +11,13 @@
 }
 
 <component type="typeof(MarkdownEditor)" render-mode="Server"/>
-
 <input type="hidden" data-blog-pid="@post.Id">
+
+<article id="article-preview" style="background: #333; max-width: 700px; margin: 20px auto; padding: 20px;">
+    <div id="editorjs"></div>
+</article>
+
+@*
 
 <div class="d-flex flex-column" style="height: calc(100vh - 35px)">
     <div class="mb-3">
@@ -46,4 +51,4 @@
             </article>
         </div>
     </div>
-</div>
+</div>*@

@@ -19,6 +19,7 @@
   "author": "Oliver Booth",
   "license": "MIT",
   "devDependencies": {
+    "@editorjs/editorjs": "^2.29.0",
     "gulp": "^4.0.2",
     "gulp-clean-css": "^4.3.0",
     "gulp-noop": "^1.0.1",
@@ -31,5 +32,11 @@
     "terser": "^5.19.2",
     "vinyl-named": "^1.1.0",
     "webpack-stream": "^7.0.0"
+  },
+  "dependencies": {
+    "@editorjs/header": "^2.8.1",
+    "@editorjs/paragraph": "^2.11.3",
+    "codex-notifier": "^1.1.2",
+    "codex-tooltip": "^1.0.5"
   }
 }

@@ -3,8 +3,10 @@ import UI from "./MarkdownEditor/UI"
 import API from "../app/API";
 import "./TabSupport"
 import Interop from "./Interop";
-import MarkdownEditor from "./MarkdownEditor/MarkdownEditor";
 import SaveButtonMode from "./MarkdownEditor/SaveButtonMode";
+import EditorJS from "@editorjs/editorjs";
+import Header from "@editorjs/header";
+import SimpleImage from "./BlockTools/SimpleImage";
 
 (() => {
     getCurrentBlogPost().then(post => {
@@ -12,15 +14,30 @@ import SaveButtonMode from "./MarkdownEditor/SaveButtonMode";
             return;
         }
 
-        UI.init();
-        UI.addSaveButtonListener(savePost);
+        // UI.init();
+        // UI.addSaveButtonListener(savePost);
 
-        const editor = new MarkdownEditor(UI.markdownInput);
+        const editor = new EditorJS({
+            tools: {
+                header: {
+                    class: Header,
+                    config: {
+                        placeholder: 'Heading',
+                        levels: [2, 3, 4],
+                        defaultLevel: 2
+                    }
+                },
+                image: SimpleImage
+            }
+        });
+
+        /*const editor = new MarkdownEditor(UI.markdownInput);
         editor.addSaveListener(savePost);
         editor.registerDefaultShortcuts();
-        editor.registerEvents();
+        editor.registerEvents();*/
 
         async function savePost(): Promise<void> {
+            return;
             UI.setSaveButtonMode(SaveButtonMode.SAVING);
             await Interop.invoke("Save", post.id, UI.markdownInput.value);
             post = await API.getBlogPost(post.id);
@@ -31,7 +48,7 @@ import SaveButtonMode from "./MarkdownEditor/SaveButtonMode";
             setTimeout(() => UI.setSaveButtonMode(SaveButtonMode.NORMAL), 2000);
         }
 
-        UI.redraw();
+        // UI.redraw();
     });
 
     async function getCurrentBlogPost(): Promise<BlogPost> {
