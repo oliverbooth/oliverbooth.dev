@@ -13,11 +13,12 @@ import webpack from "webpack-stream";
 import vinylPaths from "vinyl-paths";
 
 const srcDir = "src";
+const tmpDir = "tmp";
 const destDir = "OliverBooth/wwwroot";
 const isDevelopment = !!process.env.DEVELOPMENT;
 
 function cleanTMP() {
-    return gulp.src("tmp", {allowEmpty: true})
+    return gulp.src(tmpDir, {allowEmpty: true})
         .pipe(vinylPaths(deleteSync));
 }
 
@@ -41,17 +42,17 @@ function compileTS() {
         .pipe(isDevelopment ? sourcemaps.init() : noop())
         .pipe(ts("tsconfig.json"))
         .pipe(isDevelopment ? sourcemaps.write("./", { includeContent: true }) : noop())
-        .pipe(gulp.dest(`tmp/js`));
+        .pipe(gulp.dest(`${tmpDir}/js`));
 }
 
 function bundleJS(done) {
-    const tasks = fs.readdirSync("tmp/js", {withFileTypes: true})
+    const tasks = fs.readdirSync(`${tmpDir}/js`, {withFileTypes: true})
         .filter(dirent => dirent.isDirectory())
         .map(d => bundleDir(d.name));
     return gulp.parallel(...tasks, writeSourcemaps)(done);
 
     function bundleDir(directory) {
-        return () => gulp.src(`tmp/js/${directory}/${directory}.js`)
+        return () => gulp.src(`${tmpDir}/js/${directory}/${directory}.js`)
             .pipe(isDevelopment ? sourcemaps.init() : noop())
             .pipe(webpack({mode: "production", output: {filename: `${directory}.min.js`}, devtool: "source-map"}))
             .pipe(isDevelopment ? sourcemaps.write("./", { includeContent: true }) : noop())
