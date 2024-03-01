@@ -1,15 +1,15 @@
-const fs = require("fs");
-const gulp = require("gulp");
-const cleanCSS = require("gulp-clean-css");
-const named = require("vinyl-named");
-const noop = require("gulp-noop");
-const path = require("path");
-const rename = require("gulp-rename");
-const sass = require('gulp-sass')(require("sass"));
-const sourcemaps = require("gulp-sourcemaps");
-const ts = require("gulp-typescript");
-const terser = require("gulp-terser");
-const webpack = require("webpack-stream");
+import fs from "fs";
+import gulp from "gulp";
+import cleanCSS from "gulp-clean-css";
+import noop from "gulp-noop";
+import rename from "gulp-rename";
+import gulpSass from "gulp-sass";
+import * as nodeSass from "sass";
+const sass = gulpSass(nodeSass);
+import sourcemaps from "gulp-sourcemaps";
+import ts from "gulp-typescript";
+import terser from "gulp-terser";
+import webpack from "webpack-stream";
 
 const srcDir = "src";
 const destDir = "OliverBooth/wwwroot";
@@ -66,8 +66,7 @@ function copyImages() {
         .pipe(gulp.dest(`${destDir}/img`));
 }
 
-exports.assets = copyImages;
-exports.styles = gulp.parallel(compileSCSS, copyCSS);
-exports.scripts = gulp.parallel(copyJS, gulp.series(compileTS, bundleJS));
-
-exports.default = gulp.parallel(exports.styles, exports.scripts, exports.assets);
+gulp.task("assets", copyImages);
+gulp.task("styles", gulp.parallel(compileSCSS, copyCSS));
+gulp.task("scripts", gulp.parallel(copyJS, gulp.series(compileTS, bundleJS)));
+gulp.task("default", gulp.parallel("styles", "scripts", "assets"));
