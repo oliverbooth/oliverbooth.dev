@@ -15,7 +15,7 @@ import vinylPaths from "vinyl-paths";
 
 const srcDir = "src";
 const destDir = "OliverBooth/wwwroot";
-const production = !process.env.DEVELOPMENT;
+const isDevelopment = !!process.env.DEVELOPMENT;
 
 function cleanTMP() {
     return gulp.src("tmp", {allowEmpty: true})
@@ -29,20 +29,20 @@ function cleanWWWRoot() {
 
 function compileSCSS() {
     return gulp.src(`${srcDir}/scss/**/*.scss`)
-        .pipe(production ? sourcemaps.init() : noop())
+        .pipe(isDevelopment ? sourcemaps.init() : noop())
         .pipe(sass().on("error", sass.logError))
         .pipe(cleanCSS({compatibility: "ie11"}))
         .pipe(rename({suffix: ".min"}))
-        .pipe(production ? sourcemaps.write() : noop())
+        .pipe(isDevelopment ? sourcemaps.write() : noop())
         .pipe(gulp.dest(`${destDir}/css`));
 }
 
 function compileTS() {
     return gulp.src(`${srcDir}/ts/**/*.ts`)
-        .pipe(production ? sourcemaps.init() : noop())
+        .pipe(isDevelopment ? sourcemaps.init() : noop())
         .pipe(ts("tsconfig.json"))
         .pipe(terser())
-        .pipe(production ? sourcemaps.write() : noop())
+        .pipe(isDevelopment ? sourcemaps.write() : noop())
         .pipe(gulp.dest(`tmp/js`));
 }
 
@@ -54,9 +54,9 @@ function bundleJS(done) {
 
     function bundleDir(directory) {
         return () => gulp.src(`tmp/js/${directory}/${directory}.js`)
-            .pipe(production ? sourcemaps.init() : noop())
+            .pipe(isDevelopment ? sourcemaps.init() : noop())
             .pipe(webpack({mode: "production", output: {filename: `${directory}.min.js`}}))
-            .pipe(production ? sourcemaps.write() : noop())
+            .pipe(isDevelopment ? sourcemaps.write() : noop())
             .pipe(gulp.dest(`${destDir}/js`));
     }
 }
