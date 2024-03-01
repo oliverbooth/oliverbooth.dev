@@ -9,7 +9,6 @@ import * as nodeSass from "sass";
 const sass = gulpSass(nodeSass);
 import sourcemaps from "gulp-sourcemaps";
 import ts from "gulp-typescript";
-import terser from "gulp-terser";
 import webpack from "webpack-stream";
 import vinylPaths from "vinyl-paths";
 
@@ -41,7 +40,6 @@ function compileTS() {
     return gulp.src(`${srcDir}/ts/**/*.ts`)
         .pipe(isDevelopment ? sourcemaps.init() : noop())
         .pipe(ts("tsconfig.json"))
-        .pipe(terser())
         .pipe(isDevelopment ? sourcemaps.write() : noop())
         .pipe(gulp.dest(`tmp/js`));
 }
