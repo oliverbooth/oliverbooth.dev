@@ -40,7 +40,7 @@ function compileTS() {
     return gulp.src(`${srcDir}/ts/**/*.ts`)
         .pipe(isDevelopment ? sourcemaps.init() : noop())
         .pipe(ts("tsconfig.json"))
-        .pipe(isDevelopment ? sourcemaps.write() : noop())
+        .pipe(isDevelopment ? sourcemaps.write("./", { includeContent: true }) : noop())
         .pipe(gulp.dest(`tmp/js`));
 }
 
@@ -48,13 +48,20 @@ function bundleJS(done) {
     const tasks = fs.readdirSync("tmp/js", {withFileTypes: true})
         .filter(dirent => dirent.isDirectory())
         .map(d => bundleDir(d.name));
-    return gulp.parallel(...tasks)(done);
+    return gulp.parallel(...tasks, writeSourcemaps)(done);
 
     function bundleDir(directory) {
         return () => gulp.src(`tmp/js/${directory}/${directory}.js`)
             .pipe(isDevelopment ? sourcemaps.init() : noop())
-            .pipe(webpack({mode: "production", output: {filename: `${directory}.min.js`}}))
-            .pipe(isDevelopment ? sourcemaps.write() : noop())
+            .pipe(webpack({mode: "production", output: {filename: `${directory}.min.js`}, devtool: "source-map"}))
+            .pipe(isDevelopment ? sourcemaps.write("./", { includeContent: true }) : noop())
+            .pipe(gulp.dest(`${destDir}/js`));
+    }
+
+    function writeSourcemaps() {
+        return gulp.src(`${destDir}/js/**/*.js`)
+            .pipe(isDevelopment ? sourcemaps.init({ loadMaps: true }) : noop())
+            .pipe(isDevelopment ? sourcemaps.write("./", { includeContent: true }) : noop())
             .pipe(gulp.dest(`${destDir}/js`));
     }
 }
