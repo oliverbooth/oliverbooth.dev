@@ -1,6 +1,7 @@
 import fs from "fs";
 import gulp from "gulp";
 import cleanCSS from "gulp-clean-css";
+import {deleteSync} from "del";
 import noop from "gulp-noop";
 import rename from "gulp-rename";
 import gulpSass from "gulp-sass";
@@ -10,10 +11,21 @@ import sourcemaps from "gulp-sourcemaps";
 import ts from "gulp-typescript";
 import terser from "gulp-terser";
 import webpack from "webpack-stream";
+import vinylPaths from "vinyl-paths";
 
 const srcDir = "src";
 const destDir = "OliverBooth/wwwroot";
 const production = !process.env.DEVELOPMENT;
+
+function cleanTMP() {
+    return gulp.src("tmp", {allowEmpty: true})
+        .pipe(vinylPaths(deleteSync));
+}
+
+function cleanWWWRoot() {
+    return gulp.src(destDir, {allowEmpty: true})
+        .pipe(vinylPaths(deleteSync));
+}
 
 function compileSCSS() {
     return gulp.src(`${srcDir}/scss/**/*.scss`)
@@ -66,7 +78,16 @@ function copyImages() {
         .pipe(gulp.dest(`${destDir}/img`));
 }
 
+function exists(path) {
+    try {
+        return fs.existsSync(path);
+    } catch (err) {
+        return false;
+    }
+}
+
+gulp.task("clean", gulp.parallel(cleanTMP, cleanWWWRoot));
 gulp.task("assets", copyImages);
 gulp.task("styles", gulp.parallel(compileSCSS, copyCSS));
 gulp.task("scripts", gulp.parallel(copyJS, gulp.series(compileTS, bundleJS)));
-gulp.task("default", gulp.parallel("styles", "scripts", "assets"));
+gulp.task("default", gulp.series("clean", gulp.parallel("styles", "scripts", "assets"), cleanTMP));

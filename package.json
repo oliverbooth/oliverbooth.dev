@@ -20,6 +20,7 @@
   "license": "MIT",
   "devDependencies": {
     "@editorjs/editorjs": "^2.29.0",
+    "del": "^7.1.0",
     "gulp": "^4.0.2",
     "gulp-clean-css": "^4.3.0",
     "gulp-noop": "^1.0.1",
@@ -30,6 +31,7 @@
     "gulp-typescript": "^6.0.0-alpha.1",
     "sass": "^1.69.5",
     "terser": "^5.19.2",
+    "vinyl-paths": "^5.0.0",
     "webpack-stream": "^7.0.0"
   },
   "dependencies": {
