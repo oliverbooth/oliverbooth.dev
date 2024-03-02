@@ -1,0 +1,7 @@
+@OliverBooth.Api_HostAddress = https://localhost:2844
+@TestPostId = bdcd9789-f0a6-4721-a66d-b6f7e2acd0f7
+
+GET {{OliverBooth.Api_HostAddress}}/v1/blog/post/{{TestPostId}}
+Accept: application/json
+
+###
