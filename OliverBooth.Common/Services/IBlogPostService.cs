@@ -42,7 +42,7 @@ public interface IBlogPostService
     /// <param name="page">The zero-based index of the page to return.</param>
     /// <param name="pageSize">The maximum number of posts to return per page.</param>
     /// <returns>A collection of blog posts.</returns>
-    IReadOnlyList<IBlogPost> GetBlogPosts(int page, int pageSize = 10);
+    IReadOnlyList<IBlogPost> GetBlogPosts(int page, int pageSize);
 
     /// <summary>
     ///     Returns the drafts of this post, sorted by their update timestamp.
