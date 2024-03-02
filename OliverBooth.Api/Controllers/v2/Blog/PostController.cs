@@ -4,7 +4,7 @@ using OliverBooth.Api.Data;
 using OliverBooth.Common.Data.Blog;
 using OliverBooth.Common.Services;
 
-namespace OliverBooth.Api.Controllers.Blog;
+namespace OliverBooth.Api.Controllers.v2.Blog;
 
 /// <summary>
 ///     Represents an API controller which allows reading and writing of blog posts.
@@ -12,7 +12,7 @@ namespace OliverBooth.Api.Controllers.Blog;
 [ApiController]
 [Route("v{version:apiVersion}/blog/post")]
 [Produces("application/json")]
-[ApiVersion(1)]
+[ApiVersion(2)]
 public sealed class PostController : ControllerBase
 {
     private const int ItemsPerPage = 10;

@@ -3,7 +3,7 @@ import Author from "./Author";
 
 class API {
     private static readonly BLOG_URL: string = "/blog";
-    private static readonly BASE_URL: string = `https://localhost:2840/v1${API.BLOG_URL}`;
+    private static readonly BASE_URL: string = `https://localhost:2840/v2${API.BLOG_URL}`;
     private static readonly AUTHOR_URL: string = "/author";
     private static readonly POST_URL: string = "/post";
 

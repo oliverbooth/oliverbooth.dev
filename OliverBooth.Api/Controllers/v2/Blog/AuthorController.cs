@@ -4,7 +4,7 @@ using OliverBooth.Api.Data;
 using OliverBooth.Common.Data.Web.Users;
 using OliverBooth.Common.Services;
 
-namespace OliverBooth.Api.Controllers.Blog;
+namespace OliverBooth.Api.Controllers.v2.Blog;
 
 /// <summary>
 ///     Represents an API controller which allows reading authors of blog posts.
@@ -12,7 +12,7 @@ namespace OliverBooth.Api.Controllers.Blog;
 [ApiController]
 [Route("v{version:apiVersion}/blog/author")]
 [Produces("application/json")]
-[ApiVersion(1)]
+[ApiVersion(2)]
 public sealed class AuthorController : ControllerBase
 {
     private readonly IUserService _userService;
