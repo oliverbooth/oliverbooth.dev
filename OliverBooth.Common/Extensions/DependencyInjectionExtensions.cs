@@ -1,6 +1,8 @@
+using Markdig;
 using Microsoft.Extensions.DependencyInjection;
 using OliverBooth.Common.Data.Blog;
 using OliverBooth.Common.Data.Web;
+using OliverBooth.Common.Markdown.Template;
 using OliverBooth.Common.Services;
 using X10D.Hosting.DependencyInjection;
 
@@ -17,6 +19,15 @@ public static class DependencyInjectionExtensions
     /// <param name="collection">The <see cref="IServiceCollection" /> to add the service to.</param>
     public static void AddCommonServices(this IServiceCollection collection)
     {
+        collection.AddSingleton(provider => new MarkdownPipelineBuilder()
+            // .Use<TimestampExtension>()
+            .Use(new TemplateExtension(provider.GetRequiredService<ITemplateService>()))
+            .UseAdvancedExtensions()
+            .UseBootstrap()
+            .UseEmojiAndSmiley()
+            .UseSmartyPants()
+            .Build());
+
         collection.AddDbContextFactory<BlogContext>();
         collection.AddDbContextFactory<WebContext>();
 

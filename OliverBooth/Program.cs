@@ -3,11 +3,7 @@ using Asp.Versioning;
 using AspNetCore.ReCaptcha;
 using FluentFTP;
 using FluentFTP.Logging;
-using Markdig;
 using OliverBooth.Common.Extensions;
-using OliverBooth.Common.Markdown.Template;
-using OliverBooth.Common.Services;
-using OliverBooth.Markdown.Timestamp;
 using OliverBooth.Services;
 using Serilog;
 using Serilog.Extensions.Logging;
@@ -24,15 +20,6 @@ WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 builder.Configuration.AddTomlFile("data/config.toml", true, true);
 builder.Logging.ClearProviders();
 builder.Logging.AddSerilog();
-
-builder.Services.AddSingleton(provider => new MarkdownPipelineBuilder()
-    .Use<TimestampExtension>()
-    .Use(new TemplateExtension(provider.GetRequiredService<ITemplateService>()))
-    .UseAdvancedExtensions()
-    .UseBootstrap()
-    .UseEmojiAndSmiley()
-    .UseSmartyPants()
-    .Build());
 
 builder.Services.AddApiVersioning(options =>
 {

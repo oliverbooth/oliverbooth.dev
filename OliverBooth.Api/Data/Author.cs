@@ -1,5 +1,4 @@
 using System.Text.Json.Serialization;
-using OliverBooth.Common.Data.Blog;
 using OliverBooth.Common.Data.Web.Users;
 
 namespace OliverBooth.Api.Data;
