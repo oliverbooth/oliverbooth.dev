@@ -7,7 +7,6 @@ using Markdig;
 using OliverBooth.Common.Extensions;
 using OliverBooth.Common.Markdown.Template;
 using OliverBooth.Common.Services;
-using OliverBooth.Data.Blog;
 using OliverBooth.Extensions;
 using OliverBooth.Markdown.Timestamp;
 using OliverBooth.Services;

@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using OliverBooth.Common.Data.Blog;
 using OliverBooth.Common.Data.Web.Users;
 using OliverBooth.Common.Services;
-using OliverBooth.Services;
 
 namespace OliverBooth.Pages.Admin;
 
