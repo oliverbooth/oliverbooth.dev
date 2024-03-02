@@ -34,6 +34,7 @@
     "webpack-stream": "^7.0.0"
   },
   "dependencies": {
+    "@editorjs/code": "^2.9.0",
     "@editorjs/header": "^2.8.1",
     "@editorjs/paragraph": "^2.11.3",
     "codex-notifier": "^1.1.2",

@@ -6,6 +6,7 @@ import Interop from "./Interop";
 import SaveButtonMode from "./MarkdownEditor/SaveButtonMode";
 import EditorJS from "@editorjs/editorjs";
 import Header from "@editorjs/header";
+import CodeTool from "@editorjs/code";
 import SimpleImage from "./BlockTools/SimpleImage";
 import Utility from "../app/Utility";
 
@@ -25,6 +26,7 @@ import Utility from "../app/Utility";
         const editor = new EditorJS({
             autofocus: true,
             tools: {
+                code: CodeTool,
                 header: {
                     class: Header,
                     config: {
