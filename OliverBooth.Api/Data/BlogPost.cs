@@ -49,7 +49,8 @@ internal sealed class BlogPost
     [JsonPropertyName("updated"), JsonInclude, JsonPropertyOrder(6)]
     public long? Updated { get; private set; }
 
-    [JsonPropertyName("url"), JsonInclude] public object Url { get; private set; } = null!;
+    [JsonPropertyName("url"), JsonInclude, JsonPropertyOrder(14)]
+    public object Url { get; private set; } = null!;
 
     public static BlogPost FromBlogPost(IBlogPost post, IBlogPostService blogPostService,
         bool includeContent = false)
