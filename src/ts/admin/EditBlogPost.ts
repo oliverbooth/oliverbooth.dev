@@ -18,6 +18,7 @@ import SimpleImage from "./BlockTools/SimpleImage";
         // UI.addSaveButtonListener(savePost);
 
         const editor = new EditorJS({
+            autofocus: true,
             tools: {
                 header: {
                     class: Header,
