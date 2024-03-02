@@ -1,3 +1,4 @@
+@using System.Text.Json
 @using OliverBooth.Common.Data.Blog
 @using OliverBooth.Common.Services
 @implements IDisposable
@@ -6,6 +7,17 @@
 
 @code {
     private DotNetObjectReference<MarkdownEditor>? _dotNetHelper;
+
+    [JSInvokable]
+    public string GetEditorObject(Guid id)
+    {
+        if (!BlogPostService.TryGetPost(id, out IBlogPost? post))
+        {
+            return JsonSerializer.Serialize(new { blocks = Array.Empty<object>() });
+        }
+
+        return BlogPostService.GetBlogPostEditorObject(post);
+    }
 
     [JSInvokable]
     public void Save(Guid id, string content)

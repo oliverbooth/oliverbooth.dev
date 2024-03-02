@@ -7,12 +7,17 @@ import SaveButtonMode from "./MarkdownEditor/SaveButtonMode";
 import EditorJS from "@editorjs/editorjs";
 import Header from "@editorjs/header";
 import SimpleImage from "./BlockTools/SimpleImage";
+import Utility from "../app/Utility";
 
 (() => {
-    getCurrentBlogPost().then(post => {
+    getCurrentBlogPost().then(async post => {
         if (!post) {
             return;
         }
+
+        await Utility.delay(1000); // hack to wait for setDotNetHelper invocation. TODO fix this shit
+        const blocks = JSON.parse(await Interop.invoke<string>("GetEditorObject", post.id));
+        console.log("JSON object is", blocks);
 
         // UI.init();
         // UI.addSaveButtonListener(savePost);
@@ -29,7 +34,8 @@ import SimpleImage from "./BlockTools/SimpleImage";
                     }
                 },
                 image: SimpleImage
-            }
+            },
+            data: blocks
         });
 
         /*const editor = new MarkdownEditor(UI.markdownInput);

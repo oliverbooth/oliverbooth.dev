@@ -16,6 +16,7 @@ class BlogPost {
     private readonly _formattedPublishDate: string;
     private readonly _formattedUpdateDate: string;
     private readonly _tags: string[];
+    private readonly _blockData: [{ id: string, type: string, data: any }];
 
     constructor(json: any) {
         this._id = json.id;
@@ -33,6 +34,11 @@ class BlogPost {
         this._formattedPublishDate = json.formattedPublishDate;
         this._formattedUpdateDate = json.formattedUpdateDate;
         this._tags = json.tags;
+        this._blockData = json.blockData;
+    }
+
+    get blockData(): [{ id: string, type: string, data: any }] {
+        return this._blockData;
     }
 
     get id(): string {
@@ -70,7 +76,7 @@ class BlogPost {
     get url(): BlogUrl {
         return this._url;
     }
-    
+
     get tags(): string[] {
         return this._tags;
     }
