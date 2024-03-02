@@ -21,8 +21,8 @@ builder.Logging.AddSerilog();
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("localhost", policy => policy.WithOrigins("https://localhost:2845"));
-    options.AddPolicy("site", policy => policy.WithOrigins("https://oliverbooth.dev"));
+    options.AddPolicy("localhost", policy => policy.WithOrigins("https://localhost:2843", "https://localhost:2845"));
+    options.AddPolicy("site", policy => policy.WithOrigins("https://admin.oliverbooth.dev", "https://oliverbooth.dev"));
 });
 
 builder.Services.AddCommonServices();
