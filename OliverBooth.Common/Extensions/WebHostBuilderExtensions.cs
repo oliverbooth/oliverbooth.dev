@@ -1,6 +1,7 @@
 using System.Security.Cryptography.X509Certificates;
+using Microsoft.AspNetCore.Hosting;
 
-namespace OliverBooth.Extensions;
+namespace OliverBooth.Common.Extensions;
 
 /// <summary>
 ///     Extension methods for <see cref="IWebHostBuilder" />.
