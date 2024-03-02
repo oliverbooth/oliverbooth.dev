@@ -1,8 +1,10 @@
 @page "/admin/blog-posts"
 @using System.Diagnostics
-@using OliverBooth.Data
-@using OliverBooth.Data.Blog
-@using OliverBooth.Data.Web
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using OliverBooth.Common.Data
+@using OliverBooth.Common.Data.Blog
+@using OliverBooth.Common.Data.Web.Users
+@using OliverBooth.Common.Services
 @using OliverBooth.Services
 @model OliverBooth.Pages.Admin.BlogPosts
 @inject IBlogPostService BlogPostService
@@ -52,7 +54,7 @@
         <th>Options</th>
     </tr>
     </thead>
-    
+
     <tbody>
     @foreach (IBlogPost post in BlogPostService.GetAllBlogPosts(visibility: (BlogPostVisibility)(-1)))
     {

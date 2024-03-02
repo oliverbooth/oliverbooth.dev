@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using OliverBooth.Services;
+using OliverBooth.Common.Services;
 
 namespace OliverBooth.Pages.Admin;
 

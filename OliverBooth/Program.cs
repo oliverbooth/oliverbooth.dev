@@ -4,15 +4,15 @@ using AspNetCore.ReCaptcha;
 using FluentFTP;
 using FluentFTP.Logging;
 using Markdig;
+using OliverBooth.Common.Extensions;
+using OliverBooth.Common.Markdown.Template;
+using OliverBooth.Common.Services;
 using OliverBooth.Data.Blog;
-using OliverBooth.Data.Web;
 using OliverBooth.Extensions;
-using OliverBooth.Markdown.Template;
 using OliverBooth.Markdown.Timestamp;
 using OliverBooth.Services;
 using Serilog;
 using Serilog.Extensions.Logging;
-using X10D.Hosting.DependencyInjection;
 
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
@@ -44,8 +44,7 @@ builder.Services.AddApiVersioning(options =>
     options.ApiVersionReader = new UrlSegmentApiVersionReader();
 });
 
-builder.Services.AddDbContextFactory<BlogContext>();
-builder.Services.AddDbContextFactory<WebContext>();
+builder.Services.AddCommonServices();
 builder.Services.AddHttpClient();
 builder.Services.AddTransient<IAsyncFtpClient, AsyncFtpClient>(provider =>
 {
@@ -66,14 +65,7 @@ builder.Services.AddTransient<IAsyncFtpClient, AsyncFtpClient>(provider =>
 });
 
 builder.Services.AddSingleton<ICdnService, CdnService>();
-builder.Services.AddSingleton<IContactService, ContactService>();
-builder.Services.AddSingleton<ITemplateService, TemplateService>();
-builder.Services.AddSingleton<IBlogPostService, BlogPostService>();
-builder.Services.AddSingleton<IProjectService, ProjectService>();
 builder.Services.AddSingleton<IMastodonService, MastodonService>();
-builder.Services.AddSingleton<IReadingListService, ReadingListService>();
-builder.Services.AddHostedSingleton<IUserService, UserService>();
-builder.Services.AddHostedSingleton<ISessionService, SessionService>();
 builder.Services.AddRazorPages().AddRazorRuntimeCompilation();
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorComponents().AddInteractiveServerComponents();

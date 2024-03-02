@@ -1,9 +1,9 @@
 using System.Diagnostics;
 using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
-using OliverBooth.Data.Web;
-using OliverBooth.Services;
-using ISession = OliverBooth.Data.Web.ISession;
+using OliverBooth.Common.Data.Web.Users;
+using OliverBooth.Common.Services;
+using ISession = OliverBooth.Common.Data.Web.Users.ISession;
 
 namespace OliverBooth.Controllers.Api.v1;
 

@@ -1,6 +1,7 @@
 @page "/blog/{year:int}/{month:int}/{day:int}/{slug}"
 @using Humanizer
-@using OliverBooth.Data.Blog
+@using OliverBooth.Common.Data.Blog
+@using OliverBooth.Common.Services
 @using OliverBooth.Services
 @inject IBlogPostService BlogPostService
 @model Article
@@ -29,7 +30,7 @@
 @{
     ViewData["Post"] = post;
     ViewData["Title"] = post.Title;
-    IBlogAuthor author = post.Author;
+    IAuthor author = post.Author;
     DateTimeOffset published = post.Published;
 }
 
