@@ -21,3 +21,43 @@ services:
       - SSL_KEY_PATH=${SSL_KEY_PATH}
       - MASTODON_TOKEN=${MASTODON_TOKEN}
       - MASTODON_ACCOUNT=${MASTODON_ACCOUNT}
+
+  oliverbooth_api:
+    container_name: api.oliverbooth.dev
+    pull_policy: build
+    build:
+      context: .
+      dockerfile: OliverBooth.Api/Dockerfile
+    volumes:
+      - type: bind
+        source: /var/log/oliverbooth/api
+        target: /app/logs
+      - type: bind
+        source: /etc/oliverbooth/api
+        target: /app/data
+    ports:
+      - "2844:2844"
+    restart: always
+    environment:
+      - SSL_CERT_PATH=${API_SSL_CERT_PATH}
+      - SSL_KEY_PATH=${API_SSL_KEY_PATH}
+
+  oliverbooth_admin:
+    container_name: admin.oliverbooth.dev
+    pull_policy: build
+    build:
+      context: .
+      dockerfile: OliverBooth.Admin/Dockerfile
+    volumes:
+      - type: bind
+        source: /var/log/oliverbooth/admin
+        target: /app/logs
+      - type: bind
+        source: /etc/oliverbooth/admin
+        target: /app/data
+    ports:
+      - "2843:2843"
+    restart: always
+    environment:
+      - SSL_CERT_PATH=${ADMIN_SSL_CERT_PATH}
+      - SSL_KEY_PATH=${ADMIN_SSL_KEY_PATH}
