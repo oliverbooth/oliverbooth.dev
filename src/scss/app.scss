@@ -26,6 +26,7 @@ body {
 main.container {
   background: #333;
   padding: 20px;
+  border-radius: 5px;
 }
 
 a {
@@ -109,7 +110,7 @@ nav {
   ul.site-nav {
     list-style-type: none;
     padding: 0;
-    margin: 0 auto;
+    margin: 20px auto 0 auto;
 
     li {
       display: inline-block;
@@ -120,7 +121,7 @@ nav {
       }
 
       a {
-        font-size: 24px;
+        font-size: 20px;
 
         &:link, &:visited, &:hover, &:active {
           text-decoration: none;
@@ -142,6 +143,7 @@ nav {
 article {
   background: #333333;
   padding: 20px;
+  border-radius: 5px;
 
   *:last-child {
     margin-bottom: 0;
