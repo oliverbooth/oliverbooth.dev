@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace OliverBooth.Api.Controllers.v2;
 
 [ApiController]
-[Route("v{version:apiVersion}/api/badge")]
+[Route("v{version:apiVersion}/badge")]
 [Produces("application/json")]
 [ApiVersion(2)]
 public sealed class BadgeController : ControllerBase
