@@ -25,6 +25,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy("site", policy => policy.WithOrigins("https://admin.oliverbooth.dev", "https://oliverbooth.dev"));
 });
 
+builder.Services.AddHttpClient();
 builder.Services.AddCommonServices();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options => options.ResolveConflictingActions(resolver =>
